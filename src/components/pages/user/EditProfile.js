@@ -219,7 +219,6 @@ const EditProfile = () => {
           padding={3}
         >
           <Button
-            // endIcon={<HowToRegOutlinedIcon />}
             type="submit"
             onSubmit={handleSubmit}
             sx={{ marginTop: 3, borderRadius: 3 }}
