@@ -5,8 +5,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
-  // const [isSignup, setIsSignup] = useState(false);
-  // console.log(isSignup);
+
   const [inputs, setInputs] = useState({
     // name: "",
     email: "",
