@@ -1,21 +1,18 @@
-import React from "react";
-import { useNavigate, Route, Routes } from "react-router-dom";
-// import { Box, Button } from "@mui/material";
-import { Navbar, linksArray } from "./components/elements/Navbar";
-import Signup from "./components/pages/user/Signup";
-import Map from "./components/pages/walk/Map";
-import Profile from "./components/pages/user/Profile";
-import Signin from "./components/pages/user/Signin";
-import EditProfile from "./components/pages/user/EditProfile";
-import Friends from "./components/pages/friends/Friends";
-// import axios from "axios";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { Navbar, linksArray } from './components/organisms/Navbar';
+import Signup from './components/pages/user/Signup';
+import Map from './components/pages/walk/Map';
+import Profile from './components/pages/user/Profile';
+import Signin from './components/pages/user/Signin';
+import EditProfile from './components/pages/user/EditProfile';
+import Friends from './components/pages/friends/Friends';
 
 const Routes6 = () => {
-  // const navigate = useNavigate();
   return (
     <Routes>
       <Route
-        path="/signup"
+        path='/signup'
         element={
           <>
             <Navbar links={linksArray} />
@@ -24,7 +21,7 @@ const Routes6 = () => {
         }
       />
       <Route
-        path="/signin"
+        path='/signin'
         element={
           <>
             <Navbar links={linksArray} />
@@ -33,7 +30,7 @@ const Routes6 = () => {
         }
       />
       <Route
-        path="/profile"
+        path='/profile'
         element={
           <>
             <Navbar links={linksArray} />
@@ -42,7 +39,7 @@ const Routes6 = () => {
         }
       />
       <Route
-        path="/editProfile"
+        path='/editProfile'
         element={
           <>
             <Navbar links={linksArray} />
@@ -51,7 +48,7 @@ const Routes6 = () => {
         }
       />
       <Route
-        path="/friends"
+        path='/friends'
         element={
           <>
             <Navbar links={linksArray} />
@@ -60,7 +57,7 @@ const Routes6 = () => {
         }
       />
       <Route
-        path="/hotspots"
+        path='/hotspots'
         element={
           <>
             <Navbar links={linksArray} />
