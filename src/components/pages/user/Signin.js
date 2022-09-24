@@ -23,8 +23,8 @@ const Signin = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    // e.preventDefault(); // prevent a new http request upon submit
+  const handleSubmit = async () => {
+
     try {
       console.log(inputs);
       // const res = await axios.post(
