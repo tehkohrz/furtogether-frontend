@@ -1,92 +1,90 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../../hooks/use-auth';
 
-const Signin = () => {
+// eslint-disable-next-line no-unused-vars
+const Signin = ({ ...props }) => {
+  const { signIn, isAuthenticated } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [inputs, setInputs] = useState({
-    // name: "",
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // // grab fields input from state
-  // const { email, password } = inputs;
+  const from = location.state?.from?.pathname || '/profile';
 
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handlePasswordchange = (e) => {
+    setPassword(e.target.value);
+  };
 
+  const handleSignIn = async () => {
     try {
-      console.log(inputs);
-      // const res = await axios.post(
-      //   process.env.REACT_APP_API_URL + "/user/signin",
-      //   inputs
-      // );
-
-      navigate("/profile");
-    } catch (e) {
-      console.log(e);
+      await signIn(email, password);
+      navigate(from, { replace: false });
+    } catch (err) {
+      alert(err.params);
     }
   };
 
-  const navigate = useNavigate();
+  if (isAuthenticated) {
+    console.log('isAuthenticated: ', isAuthenticated);
+    navigate(from, { replace: true });
+  }
+
   return (
     <div>
       <form>
         <Box
-          display="flex"
-          flexDirection={"column"}
+          display='flex'
+          flexDirection={'column'}
           maxWidth={400}
-          alignItems="center"
-          justifyContent={"center"}
-          margin="auto"
+          alignItems='center'
+          justifyContent={'center'}
+          margin='auto'
           marginTop={16}
           padding={3}
-    
         >
-          <Typography variant="h3" padding={3} textAlign="center">
-            {"Login"}
+          <Typography variant='h3' padding={3} textAlign='center'>
+            {'Login'}
           </Typography>
 
           <TextField
-            onChange={handleChange}
-            name="email"
-            value={inputs.email}
-            margin="normal"
-            type={"email"}
-            variant="outlined"
-            placeholder="Email"
+            onChange={handleEmailChange}
+            name='email'
+            value={email}
+            margin='normal'
+            type={'email'}
+            variant='outlined'
+            placeholder='Email'
           />
           <TextField
-            onChange={handleChange}
-            name="password"
-            value={inputs.password}
-            margin="normal"
-            type={"password"}
-            variant="outlined"
-            placeholder="Password"
+            onChange={handlePasswordchange}
+            name='password'
+            value={password}
+            margin='normal'
+            type={'password'}
+            variant='outlined'
+            placeholder='Password'
           />
           <Button
-            onClick={handleSubmit}
+            onClick={handleSignIn}
             sx={{ marginTop: 3, borderRadius: 3 }}
-            variant="contained"
+            variant='contained'
             // color="warning"
             style={{
-              backgroundColor: "#3dccc7 ",
+              backgroundColor: '#3dccc7 ',
             }}
           >
-            {"Login"}
+            {'Login'}
           </Button>
           <Button
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate('/signup')}
             sx={{ marginTop: 3, borderRadius: 3 }}
           >
             Change to Signup
