@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer, React } from 'react';
-import { authApi } from '../../api/auth_api';
+import { authApi } from '../../api/auth-api';
 
 const ActionType = {
   INITIALIZE: 'INITIALIZE',
@@ -79,6 +79,7 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
