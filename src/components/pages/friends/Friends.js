@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 
+// friends rachel green
 import InfoIcon from "@mui/icons-material/Info";
 
 export default function Friends() {

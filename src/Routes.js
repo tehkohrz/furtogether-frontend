@@ -24,7 +24,6 @@ function RequireAuth({ children }) {
 }
 
 const Routes6 = () => {
-  // const navigate = useNavigate();
   return (
     <Routes>
       <Route path='/' element={<Navbar links={linksArray} />}></Route>
