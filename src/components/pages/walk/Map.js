@@ -51,6 +51,7 @@ function Map() {
   });
   console.log('isLoaded', isLoaded);
 
+  // eslint-disable-next-line no-unused-vars
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [activeMarker, setActiveMarker] = useState(null);
 
