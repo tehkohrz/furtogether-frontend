@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLocation, Route, Routes, Navigate } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 // import { Box, Button } from "@mui/material";
-import { Navbar, linksArray } from './components/elements/Navbar';
+import { Navbar } from './components/organisms/Navbar';
 import Signup from './components/pages/user/Signup';
 import Map from './components/pages/walk/Map';
 import Profile from './components/pages/user/Profile';
@@ -11,7 +11,6 @@ import Friends from './components/pages/friends/Friends';
 
 import { useAuth } from './hooks/use-auth';
 
-// eslint-disable-next-line react/prop-types
 function RequireAuth({ children }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -23,66 +22,65 @@ function RequireAuth({ children }) {
   return children;
 }
 
-const Routes6 = () => {
-  return (
-    <Routes>
-      <Route path='/' element={<Navbar links={linksArray} />}></Route>
-      <Route
-        path='/signup'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <Signup />
-          </>
-        }
-      />
-      <Route
-        path='/signin'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <Signin />
-          </>
-        }
-      />
-      <Route
-        path='/profile'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <RequireAuth>{<Profile />}</RequireAuth>
-          </>
-        }
-      />
-      <Route
-        path='/editProfile'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <RequireAuth>{<EditProfile />}</RequireAuth>
-          </>
-        }
-      />
-      <Route
-        path='/friends'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <RequireAuth>{<Friends />}</RequireAuth>
-          </>
-        }
-      />
-      <Route
-        path='/hotspots'
-        element={
-          <>
-            <Navbar links={linksArray} />
-            <Map />
-          </>
-        }
-      />
-    </Routes>
-  );
-};
+const routes = [
+  {
+    path: '/',
+    element: <Navbar />,
+  },
+  {
+    path: '/signup',
+    element: (
+      <>
+        <Navbar />
+        <Signup />
+      </>
+    ),
+  },
+  {
+    path: '/signin',
+    element: (
+      <>
+        <Navbar />
+        <Signin />
+      </>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <>
+        <Navbar />
+        <RequireAuth>{<Profile />}</RequireAuth>
+      </>
+    ),
+  },
+  {
+    path: '/editProfile',
+    element: (
+      <>
+        <Navbar />
+        <RequireAuth>{<EditProfile />}</RequireAuth>
+      </>
+    ),
+  },
+  {
+    path: '/friends',
+    element: (
+      <>
+        <Navbar />
+        <RequireAuth>{<Friends />}</RequireAuth>
+      </>
+    ),
+  },
+  {
+    path: '/hotspots',
+    element: (
+      <>
+        <Navbar />
+        <Map />
+      </>
+    ),
+  },
+];
 
-export default Routes6;
+export default routes;
