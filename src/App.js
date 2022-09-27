@@ -1,10 +1,15 @@
-import React from "react";
-import Routes6 from "./Routes";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routes6 from './Routes';
 
 function App() {
   return (
     <>
-      <Routes6 />
+      <React.Suspense fallback={null}>
+        <Router basename='/'>
+          <Routes6 />
+        </Router>
+      </React.Suspense>
     </>
   );
 }
