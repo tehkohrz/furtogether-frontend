@@ -25,13 +25,12 @@ function RequireAuth({ children }) {
 const routes = [
   {
     path: '/',
-    element: <Navbar />,
+    element: <></>,
   },
   {
     path: '/signup',
     element: (
       <>
-        <Navbar />
         <Signup />
       </>
     ),
@@ -40,25 +39,18 @@ const routes = [
     path: '/signin',
     element: (
       <>
-        <Navbar />
         <Signin />
       </>
     ),
   },
   {
     path: '/profile',
-    element: (
-      <>
-        <Navbar />
-        <RequireAuth>{<Profile />}</RequireAuth>
-      </>
-    ),
+    element: <>{<Profile />}</>,
   },
   {
     path: '/editProfile',
     element: (
       <>
-        <Navbar />
         <RequireAuth>{<EditProfile />}</RequireAuth>
       </>
     ),
@@ -67,7 +59,6 @@ const routes = [
     path: '/friends',
     element: (
       <>
-        <Navbar />
         <RequireAuth>{<Friends />}</RequireAuth>
       </>
     ),
@@ -76,7 +67,6 @@ const routes = [
     path: '/hotspots',
     element: (
       <>
-        <Navbar />
         <Map />
       </>
     ),

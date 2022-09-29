@@ -1,18 +1,19 @@
 import React from 'react';
 import { Field } from 'formik';
 import {
+  Select,
   FormControl,
   FormLabel,
-  Input,
   FormErrorMessage,
 } from '@chakra-ui/react';
 
-const InputField = ({
-  placeHolder = '',
+const SelectField = ({
+  options,
+  placeHolder,
   fieldName,
-  label,
-  validateFn,
   readOnly,
+  validateFn,
+  label,
 }) => {
   return (
     <Field name={fieldName} validate={validateFn}>
@@ -22,7 +23,13 @@ const InputField = ({
           isInvalid={form.errors[fieldName] && form.touched[fieldName]}
         >
           <FormLabel>{label}</FormLabel>
-          <Input {...field} placeholder={placeHolder} />
+          <Select placeholder={placeHolder}>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
           <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
         </FormControl>
       )}
@@ -30,4 +37,4 @@ const InputField = ({
   );
 };
 
-export default InputField;
+export default SelectField;
