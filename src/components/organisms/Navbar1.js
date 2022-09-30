@@ -12,7 +12,7 @@ const linksArray = [
   { name: 'My Info', url: '/profile' },
 ];
 
-const Navbar = ({ links }) => {
+const Navbar = ({ links = linksArray }) => {
   const { logout, isAuthenticated } = useAuth();
   const [value, setValue] = useState(false);
   const navigate = useNavigate();
