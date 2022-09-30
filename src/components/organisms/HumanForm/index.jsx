@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import InputField from '../molecules/InputField';
-import SelectField from '../molecules/SelectInput';
+import InputField from '../../molecules/InputField';
+import SelectField from '../../molecules/SelectField';
 
 // Fields that are to be in the form
 const formArray = [
@@ -19,9 +19,9 @@ const formArray = [
     validateFn: null,
     type: 'select',
     options: [
-      { value: 'F', label: 'Female' },
-      { value: 'M', label: 'Male' },
       { value: 'D', label: 'Dog' },
+      { value: 'M', label: 'Male' },
+      { value: 'F', label: 'Female' },
     ],
   },
   {
