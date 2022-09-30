@@ -1,11 +1,20 @@
-import { styled, Typography } from "@mui/material";
+import { extendTheme } from '@chakra-ui/react';
 
-const GreyFont = styled(Typography)`
-  color: #808080;
-`;
+const theme = extendTheme({
+  // COLORS GO HERE
+  colors: {
+    // Class or naming to call the color bg=brand.100
+    brand: {
+      100: '#FFF',
+    },
+  },
+  components: {
+    Input: {
+      defaultProps: {
+        size: 'lg',
+      },
+    },
+  },
+});
 
-const FormFont = styled (Typography) `
-color: #9e9e9e`
-
-
-export {GreyFont, FormFont };
+export default theme;
