@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, Route, Routes, Navigate } from 'react-router-dom';
 // import { Box, Button } from "@mui/material";
-import { Navbar, linksArray } from './components/organisms/Navbar';
+import { Navbar, linksArray } from './components/elements/Navbar';
 import Signup from './components/pages/user/Signup';
 import Map from './components/pages/walk/Map';
 import Profile from './components/pages/user/Profile';
