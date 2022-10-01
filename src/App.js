@@ -63,7 +63,11 @@ function RequireAuth({ children }) {
 
 function App() {
   return (
+<<<<<<< HEAD
     <ChakraProvider theme={theme}>
+=======
+    // <ChakraProvider>
+>>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
       <React.Suspense fallback={null}>
         <Navbar />
         <Router basename='/'>
@@ -86,7 +90,7 @@ function App() {
           </Routes>
         </Router>
       </React.Suspense>
-    </ChakraProvider>
+    // </ChakraProvider>
   );
 }
 
