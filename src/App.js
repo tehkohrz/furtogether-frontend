@@ -9,8 +9,7 @@ import {
 import { ChakraProvider } from '@chakra-ui/react';
 import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
-import { Registration, Home } from './components/pages';
-import Profile from './components/pages/Profile/Profile';
+import { Registration, Home, Profile } from './components/pages';
 import { ProfileProvider } from './contexts/profile-context';
 
 import theme from './components/theme';
