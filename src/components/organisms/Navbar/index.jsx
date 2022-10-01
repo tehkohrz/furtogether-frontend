@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+// import { ReactNode } from 'react';
 import React from 'react';
 import logo from '../../../assets/logo.svg'
 import {
@@ -37,11 +37,15 @@ const Links = [
   },
   {
     name: 'HotSpots',
-    url: '/hotspots'
+    link: '/hotspots',
   },
   {
     name: 'My Info',
-    url: '/profile'
+    link: '/profile',
+  },
+  {
+    name: 'Photo Album',
+    link: '/profilerichie',
   }
 ];
 
