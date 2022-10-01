@@ -6,12 +6,14 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-// import routes from './Routes';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useAuth } from './hooks/use-auth';
 import { Navbar } from './components/organisms';
 import { Registration, Home } from './components/pages';
-import { Profile } from './components/pages/user/Profile';
+import Profile from './components/pages/Profile/Profile';
+import { ProfileProvider } from './contexts/profile-context';
+
+import theme from './components/theme';
 
 const routes = [
   // {
@@ -29,10 +31,11 @@ const authenticatedRoutes = [
   {
     path: '/profile',
     element: (
-      <>
-        <Navbar />
-        <RequireAuth>{<Profile />}</RequireAuth>
-      </>
+      <RequireAuth>
+        <ProfileProvider>
+          <Profile />
+        </ProfileProvider>
+      </RequireAuth>
     ),
   },
   // {
@@ -60,7 +63,7 @@ function RequireAuth({ children }) {
 
 function App() {
   return (
-    // <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <React.Suspense fallback={null}>
         <Navbar />
         <Router basename='/'>
@@ -83,7 +86,7 @@ function App() {
           </Routes>
         </Router>
       </React.Suspense>
-    // </ChakraProvider>
+    </ChakraProvider>
   );
 }
 
