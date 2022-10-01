@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+// import { Box, Typography } from "@mui/material";
+import { Box, Text, Flex, Spacer  } from "@chakra-ui/react";
 
 import {
   GoogleMap,
-  InfoWindowF,
-  MarkerF,
+  InfoWindow,
+  Marker,
   useJsApiLoader,
 } from "@react-google-maps/api";
 import axios from "axios";
@@ -77,7 +78,7 @@ function Map() {
   }, []);
 
   if (!isLoaded) {
-    return <Typography> Not Loading</Typography>;
+    return <Text> Not Loading</Text>;
   }
 
   const getCount = async (markerIndex) => {
@@ -103,15 +104,11 @@ function Map() {
 
   return (
     <>
+    <Flex alignItems = "center">
       <Box
-        sx={{
-          width: "100vw",
-          height: 800,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+      width="100%" height={1000}
       >
+ 
         <GoogleMap
           center={center}
           zoom={15}
@@ -126,18 +123,18 @@ function Map() {
           // onLoad={handleOnLoad}
           // onClick={() => setActiveMarker(null)}
         >
-          <MarkerF
+          <Marker
             position={center}
             icon="https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png"
           />
           {allMarkers.map(({ id, name, position, headCount }) => (
-            <MarkerF
+            <Marker
               key={id}
               position={position}
               onClick={() => handleActiveMarker(id)}
             >
               {activeMarker === id ? (
-                <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                   <div>
                     <div>{name}</div>
                     <div>Headcount {headCount}</div>
@@ -149,12 +146,14 @@ function Map() {
                     </a>
                   </div> */}
                   </div>
-                </InfoWindowF>
+                </InfoWindow>
               ) : null}
-            </MarkerF>
+            </Marker>
           ))}
         </GoogleMap>
+        
       </Box>
+      </Flex>
     </>
   );
 }

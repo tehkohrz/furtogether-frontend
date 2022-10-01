@@ -9,7 +9,7 @@ import {
 import { ChakraProvider } from '@chakra-ui/react';
 import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
-import { Registration, Home, Profile } from './components/pages';
+import { Registration, Home, Profile , Map} from './components/pages';
 import { ProfileProvider } from './contexts/profile-context';
 
 import theme from './components/theme';
@@ -21,13 +21,18 @@ const routes = [
   // },
   {
     // path: '/login',
-    path: '/',
+    path: "/",
     element: <Registration />,
   },
   {
     path: '/profilerichie',
     element: <PhotoAlbum/>
-  }
+  },
+  {
+    // path: '/login',
+    path: "/walk/map",
+    element: <Map/>,
+  },
 ];
 
 const authenticatedRoutes = [
