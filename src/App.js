@@ -27,7 +27,8 @@ const routes = [
   {
     path: '/profilerichie',
     element: <PhotoAlbum/>
-  }
+  },
+  {
     // path: '/login',
     path: "/walk/map",
     element: <Map/>,
