@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 // import { Box, Button } from "@mui/material";
 import { Navbar } from './components/organisms/Navbar';
@@ -26,6 +26,9 @@ import Friends from "./components/pages/friends/Friends";
 import { useAuth } from "./hooks/use-auth";
 >>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
 
+import GoogleLogin from './components/molecules/GoogleLogin';
+// import firebaseAuth from './services/firebase.service';
+
 function RequireAuth({ children }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -40,6 +43,16 @@ function RequireAuth({ children }) {
 
   return children;
 }
+
+// Google Auth
+// const [user, setUser] = useState(null);
+
+// useEffect(() => {
+//   firebaseAuth.auth().onAuthStateChanged((googleUser) => {
+//     setUser(googleUser);
+//     console.log('Google Auth User: ', user);
+//   });
+// }, []);
 
 const routes = [
   {
@@ -75,6 +88,7 @@ const routes = [
     element: (
       <>
         <Navbar />
+        <GoogleLogin />
 >>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
         <Signin />
       </>
