@@ -9,29 +9,25 @@ import {
 import { ChakraProvider } from '@chakra-ui/react';
 import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
-import { Registration, Home, Profile , Map} from './components/pages';
+import { Registration, Home, Profile, Map } from './components/pages';
 import { ProfileProvider } from './contexts/profile-context';
 
 import theme from './components/theme';
 
 const routes = [
-  // {
-  //   path: '/',
-  //   element: <Home />,
-  // },
   {
     // path: '/login',
-    path: "/",
+    path: '/signin',
     element: <Registration />,
   },
   {
     path: '/profilerichie',
-    element: <PhotoAlbum/>
+    element: <PhotoAlbum />,
   },
   {
     // path: '/login',
-    path: "/walk/map",
-    element: <Map/>,
+    path: '/walk/map',
+    element: <Map />,
   },
 ];
 
@@ -39,11 +35,9 @@ const authenticatedRoutes = [
   {
     path: '/profile',
     element: (
-      <RequireAuth>
-        <ProfileProvider>
-          <Profile />
-        </ProfileProvider>
-      </RequireAuth>
+      <ProfileProvider>
+        <Profile />
+      </ProfileProvider>
     ),
   },
   // {
@@ -63,7 +57,7 @@ function RequireAuth({ children }) {
   console.log('isAuthenticated: ', isAuthenticated);
   if (!isAuthenticated) {
     // write path of sign-in page here instead of '/'
-    return <Navigate to='/' state={{ from: location }} replace />;
+    return <Navigate to='/signin' state={{ from: location }} replace />;
   }
 
   return children;
