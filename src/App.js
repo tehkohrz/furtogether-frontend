@@ -22,17 +22,9 @@ const routes = [
     element: <Registration />,
   },
   {
-    path: '/profilerichie',
-    element: <PhotoAlbum />,
-  },
-  {
     path: '/walk/map',
     element: <Map />,
   },
-  {
-    path: '/testing',
-    element: <ProfileTab/>,
-  }
 ];
 
 const authenticatedRoutes = [

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { TabsComponent } from '../../organisms'
-import { Profile } from '../'
+import { Profile, PhotoAlbum } from '../'
+
 
 const ProfileTab = () => {
   
@@ -12,7 +13,7 @@ const ProfileTab = () => {
     },
     {
       tab: "Photos",
-      page: "Page for Multer upload and photos"
+      page: <PhotoAlbum/>
     }
   ]
 
