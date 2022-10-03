@@ -11,6 +11,7 @@ import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
 import { Registration, Home, Profile, Map } from './components/pages';
 import { ProfileProvider } from './contexts/profile-context';
+import { ProfileTab } from './components/pages'
 
 import theme from './components/theme';
 
@@ -25,10 +26,13 @@ const routes = [
     element: <PhotoAlbum />,
   },
   {
-    // path: '/login',
     path: '/walk/map',
     element: <Map />,
   },
+  {
+    path: '/testing',
+    element: <ProfileTab/>,
+  }
 ];
 
 const authenticatedRoutes = [
@@ -36,7 +40,7 @@ const authenticatedRoutes = [
     path: '/profile',
     element: (
       <ProfileProvider>
-        <Profile />
+        <ProfileTab />
       </ProfileProvider>
     ),
   },
