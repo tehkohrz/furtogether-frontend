@@ -17,6 +17,7 @@ const InputField = ({
   validateFn,
   readOnly,
   addOns = { left: null, right: null },
+  isRequired = false,
 }) => {
   return (
     <Field name={fieldName} validate={validateFn}>
@@ -24,6 +25,7 @@ const InputField = ({
         <FormControl
           isReadOnly={readOnly}
           isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+          isRequired={isRequired}
         >
           <FormLabel>{label}</FormLabel>
 

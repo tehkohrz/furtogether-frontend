@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { Stack, Box } from '@chakra-ui/react';
+import { CloseButton, Stack, Flex, Box } from '@chakra-ui/react';
 import { Button, AppToast } from '../../atoms';
-import { formArray, generateFields } from './formFunction';
+import { generateFields, formArray } from './formFunction';
 import { useProfile } from '../../../hooks/use-profile';
 
-export default function HumanForm({ userProfile }) {
-  const { updateUser } = useProfile();
+// Takes in one entry from the dog array to generate one dog form
+export default function DogForm({ dogProfile, cardHandler, index }) {
+  const { saveNewDog, deleteDog } = useProfile();
 
   // ?HANDLERS
-  const [formReadOnly, setFormReadOnly] = useState(true);
+  // Read only toggle for the form
+  const [formReadOnly, setFormReadOnly] = useState(false);
   function toggleReadOnly(formReset = null) {
     if (!formReadOnly && formReset) {
       formReset();
@@ -20,17 +22,28 @@ export default function HumanForm({ userProfile }) {
   // Runs Save entry API for dog profile
   async function handleSave(values, actions) {
     try {
-      const updatedProfile = {
+      const newDogProfile = {
         ...values,
       };
-      const success = await updateUser(updatedProfile);
+      console.log({ newDogProfile });
+      const success = await saveNewDog(newDogProfile, index);
       // Respond with toast for feedback
       if (!success) {
-        throw new Error(`Could not update your profile.`);
+        throw new Error(`Could not save profile.`);
       }
       // Feedback Toast
+      feedBack.success(newDogProfile.dog);
       toggleReadOnly();
-      feedBack.success();
+      cardHandler();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Delete the dog card
+  async function handleDelete() {
+    try {
+      const success = await deleteDog(null, index);
     } catch (err) {
       // change form back to readOnly and update the card rendering
       feedBack.error(err);
@@ -40,21 +53,19 @@ export default function HumanForm({ userProfile }) {
   // ?FORM ATTRIBUTE
   // Initalise the initial values for formik
   const initialValues = {};
-  formArray.forEach(
-    (x) => (initialValues[x.fieldName] = userProfile[x.fieldName])
-  );
+
+  // Genertates and array of jsx for form fields
   const FormFields = generateFields(formArray, formReadOnly);
 
   return (
-    <Box flex='1'>
-      <Formik initialValues={initialValues} onSubmit={handleSave}>
-        {(props) => (
-          <Form>
-            <Stack direction={'column'}>
-              {FormFields}
-              {formReadOnly ? (
-                <Button handleClick={toggleReadOnly} text='Edit' />
-              ) : (
+    <Flex>
+      <Box flex='1'>
+        <Formik initialValues={initialValues} onSubmit={handleSave}>
+          {(props) => (
+            <Form onSubmit={props.handleSubmit}>
+              <Stack direction={'column'}>
+                {/* each input field */}
+                {FormFields}
                 <Stack direction={'row'}>
                   <Button
                     handleClick={props.submitForm}
@@ -66,33 +77,24 @@ export default function HumanForm({ userProfile }) {
                     text='Reset'
                     bg='salmon'
                   />
-                  {/* <Button handleClick={deleteHandler} text='Delete' bg='red' /> */}
                 </Stack>
-              )}
-            </Stack>
-          </Form>
-        )}
-      </Formik>
-    </Box>
+              </Stack>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+      <CloseButton size='md' onClick={handleDelete} />
+    </Flex>
   );
 }
 
 // TOAST MESSAGES
 const feedBack = {
-  success: () => {
+  success: (name) => {
     AppToast({
       title: 'Saved!',
-      description: `Your profile was updated.`,
+      description: `Profile created`,
       status: 'success',
-      position: 'bottom-right',
-      duration: 5000,
-    });
-  },
-  error: (err) => {
-    AppToast({
-      title: 'Try again!',
-      description: err.message,
-      status: 'error',
       position: 'bottom-right',
       duration: 5000,
     });

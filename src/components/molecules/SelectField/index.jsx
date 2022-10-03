@@ -14,6 +14,7 @@ const SelectField = ({
   readOnly,
   validateFn,
   label,
+  isRequired,
 }) => {
   return (
     <Field name={fieldName} validate={validateFn}>
@@ -21,9 +22,10 @@ const SelectField = ({
         <FormControl
           isReadOnly={readOnly}
           isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+          isRequired={isRequired}
         >
           <FormLabel>{label}</FormLabel>
-          <Select placeholder={placeHolder}>
+          <Select {...field} placeholder={placeHolder} isReadOnly={readOnly}>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { CloseButton, Stack, useToast } from '@chakra-ui/react';
+import { CloseButton, Stack, Flex, Box } from '@chakra-ui/react';
 import { Button, AppToast } from '../../atoms';
-import InputField from '../../molecules/InputField';
-import SelectField from '../../molecules/SelectField';
-import { profileApi } from '../../../api/profile-api';
+import { generateFields, formArray } from './formFunction';
 import { useProfile } from '../../../hooks/use-profile';
 
 // Takes in one entry from the dog array to generate one dog form
 export default function DogForm({ dogProfile, cardHandler, index }) {
-  const { updateDog, deleteDog, dogs } = useProfile();
+  const { updateDog, deleteDog } = useProfile();
 
   // ?HANDLERS
   // Read only toggle for the form
@@ -44,130 +42,63 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
     }
   }
 
-  async function handleDelete() {}
+  // Delete the dog card
+  async function handleDelete() {
+    try {
+      const success = await deleteDog(dogProfile, index);
+      if (!success) {
+        throw new Error(`Could not delete ${dogProfile.dog}'s profile.`);
+      }
+    } catch (err) {
+      // change form back to readOnly and update the card rendering
+      feedBack.error(err);
+    }
+  }
 
-  // ?FORM Attributes
+  // ?FORM ATTRIBUTE
   // Initalise the initial values for formik
   const initialValues = {};
+
   formArray.forEach(
-    (x) => (initialValues[x.fieldName] = dogProfile[x.fieldName])
+    (x) => (initialValues[x.fieldName] = dogProfile[x.fieldName] || '')
   );
   // Genertates and array of jsx for form fields
   const FormFields = generateFields(formArray, formReadOnly);
 
   return (
-    <>
-      <Formik initialValues={initialValues} onSubmit={handleSave}>
-        {(props) => (
-          <Form onSubmit={props.handleSubmit}>
-            <Stack direction={'column'}>
-              {/* each input field */}
-              {FormFields}
-              {formReadOnly ? (
-                <Button handleClick={toggleReadOnly} text='Edit' />
-              ) : (
-                <Stack direction={'row'}>
-                  <Button
-                    handleClick={props.submitForm}
-                    text='Save'
-                    bg='green'
-                  />
-                  <Button
-                    handleClick={props.handleReset}
-                    text='Reset'
-                    bg='salmon'
-                  />
-                  {/* <Button handleClick={deleteHandler} text='Delete' bg='red' /> */}
-                </Stack>
-              )}
-            </Stack>
-          </Form>
-        )}
-      </Formik>
+    <Flex>
+      <Box flex='1'>
+        <Formik initialValues={initialValues} onSubmit={handleSave}>
+          {(props) => (
+            <Form onSubmit={props.handleSubmit}>
+              <Stack direction={'column'}>
+                {/* each input field */}
+                {FormFields}
+                {formReadOnly ? (
+                  <Button handleClick={toggleReadOnly} text='Edit' />
+                ) : (
+                  <Stack direction={'row'}>
+                    <Button
+                      handleClick={props.submitForm}
+                      text='Save'
+                      bg='green'
+                    />
+                    <Button
+                      handleClick={props.handleReset}
+                      text='Reset'
+                      bg='salmon'
+                    />
+                    <Button handleClick={handleDelete} text='Delete' bg='red' />
+                  </Stack>
+                )}
+              </Stack>
+            </Form>
+          )}
+        </Formik>
+      </Box>
       <CloseButton size='md' onClick={cardHandler} />
-      {/* <AppToast /> */}
-    </>
+    </Flex>
   );
-}
-
-// Fields that are to be in the form
-const formArray = [
-  {
-    label: 'Name',
-    fieldName: 'dog',
-    placeHolder: '',
-    validateFn: null,
-    type: 'input',
-  },
-  {
-    label: 'Gender',
-    fieldName: 'gender',
-    placeHolder: '',
-    validateFn: null,
-    type: 'select',
-    options: [
-      { value: 'M', label: 'Male' },
-      { value: 'F', label: 'Female' },
-    ],
-  },
-  {
-    label: 'Breed',
-    fieldName: 'breed',
-    placeHolder: '',
-    validateFn: null,
-    type: 'input',
-  },
-  {
-    label: 'Age',
-    fieldName: 'age',
-    placeHolder: '',
-    validateFn: null,
-    type: 'input',
-    addOns: {
-      right: 'Years',
-    },
-  },
-  {
-    label: 'Weight',
-    fieldName: 'weight',
-    placeHolder: '',
-    validateFn: null,
-    type: 'input',
-    addOns: {
-      right: 'KG',
-    },
-  },
-];
-
-function generateFields(array, formReadOnly) {
-  const fields = array.map((x) => {
-    if (x.type == 'input') {
-      return (
-        <InputField
-          readOnly={formReadOnly}
-          key={x.label}
-          placeHolder={x.placeHolder}
-          validateFn={x.validateFn}
-          fieldName={x.fieldName}
-          label={x.label}
-          addOns={x.addOns ? x.addOns : {}}
-        />
-      );
-    }
-    if (x.type == 'select') {
-      return (
-        <SelectField
-          readOnly={formReadOnly}
-          key={x.label}
-          fieldName={x.fieldName}
-          options={x.options}
-          label={x.label}
-          placeHolder={x.placeHolder}
-        />
-      );
-    }
-  });
-  return fields;
 }
 
 // TOAST MESSAGES
