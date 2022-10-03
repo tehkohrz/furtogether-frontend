@@ -5,28 +5,10 @@ import HumanForm from '../../organisms/HumanForm';
 import DogComponent from '../../organisms/DogComponent';
 
 const Profile = () => {
-  // Form Edit state
-  const [formReadOnly, setFormReadOnly] = useState(true);
-
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     // Get data from the backend server
-  //     const response = await profileApi.getUserProfile();
-  //     // throw error if search failed
-  //     if (!response.success) {
-  //       throw new Error('User profile not found.');
-  //     }
-  //     // Set form state to the retrieved data
-  //     const data = response.data.userProfile;
-  //     setUserProfile(data);
-  //     setDogsArr(data.dogs);
-  //   };
-  //   getUser();
-  // }, []);
-  const { user, dogs } = useProfile();
-  console.log(user, dogs);
+  const { user } = useProfile();
+  console.log('Profile Load', user);
   // No profile loaded keep spinning
-  if (!user && !dogs) {
+  if (!user) {
     return <Spinner size='xl' />;
   }
 
@@ -34,11 +16,11 @@ const Profile = () => {
     <Center minH='`100%'>
       <Stack>
         <Flex align={'top'} justify={'center'} width={'100%'}>
-          <HumanForm formReadOnly={formReadOnly} userProfile={user} />
+          <HumanForm userProfile={user} />
         </Flex>
 
         <Flex align={'top'} justify={'center'}>
-          <DogComponent formReadOnly={formReadOnly} dogsArr={dogs} />
+          <DogComponent />
         </Flex>
       </Stack>
     </Center>

@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+import React from 'react';
+=======
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+>>>>>>> f05ca07ebc12f6deb5a2f56700fb9505ccbae64e
 import { useLocation, Navigate } from 'react-router-dom';
-// import { Box, Button } from "@mui/material";
 import { Navbar } from './components/organisms/Navbar';
 import Signup from './components/pages/user/Signup';
 import Map from './components/pages/walk/Map';
@@ -11,20 +14,6 @@ import EditProfile from './components/pages/user/EditProfile';
 import Friends from './components/pages/friends/Friends';
 
 import { useAuth } from './hooks/use-auth';
-=======
-import React from "react";
-import { useLocation, Navigate } from "react-router-dom";
-// import { Box, Button } from "@mui/material";
-import { Navbar } from "./components/organisms/Navbar";
-import Signup from "./components/pages/user/Signup";
-import Map from "./components/pages/walk/Map";
-import Profile from "./components/pages/user/Profile";
-import Signin from "./components/pages/user/Signin";
-import EditProfile from "./components/pages/user/EditProfile";
-import Friends from "./components/pages/friends/Friends";
-
-import { useAuth } from "./hooks/use-auth";
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
 
 import GoogleLogin from './components/molecules/GoogleLogin';
 // import firebaseAuth from './services/firebase.service';
@@ -34,11 +23,7 @@ function RequireAuth({ children }) {
   const location = useLocation();
 
   if (!isAuthenticated) {
-<<<<<<< HEAD
     return <Navigate to='/signin' state={{ from: location }} replace />;
-=======
-    return <Navigate to="/signin" state={{ from: location }} replace />;
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
   }
 
   return children;
@@ -56,33 +41,23 @@ function RequireAuth({ children }) {
 
 const routes = [
   {
-<<<<<<< HEAD
     path: '/',
-    element: <></>,
+    element: <Navbar />,
   },
   {
     path: '/signup',
     element: (
       <>
-=======
-    path: "/",
-    element: <Navbar />,
-  },
-  {
-    path: "/signup",
-    element: (
-      <>
-        <Navbar />
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
         <Signup />
       </>
     ),
   },
   {
-<<<<<<< HEAD
     path: '/signin',
     element: (
       <>
+<<<<<<< HEAD
+=======
 =======
     path: "/signin",
     element: (
@@ -90,12 +65,12 @@ const routes = [
         <Navbar />
         <GoogleLogin />
 >>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
+>>>>>>> f05ca07ebc12f6deb5a2f56700fb9505ccbae64e
         <Signin />
       </>
     ),
   },
   {
-<<<<<<< HEAD
     path: '/profile',
     element: <>{<Profile />}</>,
   },
@@ -103,51 +78,22 @@ const routes = [
     path: '/editProfile',
     element: (
       <>
-=======
-    path: "/profile",
-    element: (
-      <>
-        <Navbar />
-        <RequireAuth>{<Profile />}</RequireAuth>
-      </>
-    ),
-  },
-  {
-    path: "/editProfile",
-    element: (
-      <>
-        <Navbar />
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
         <RequireAuth>{<EditProfile />}</RequireAuth>
       </>
     ),
   },
   {
-<<<<<<< HEAD
     path: '/friends',
     element: (
       <>
-=======
-    path: "/friends",
-    element: (
-      <>
-        <Navbar />
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
         <RequireAuth>{<Friends />}</RequireAuth>
       </>
     ),
   },
   {
-<<<<<<< HEAD
-    path: '/hotspots',
+    path: '/walk/map',
     element: (
       <>
-=======
-    path: "/walk/map",
-    element: (
-      <>
-        <Navbar />
->>>>>>> fbb0f98766a033b9ba95d59ed52198b2f360a139
         <Map />
       </>
     ),

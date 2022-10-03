@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import ClosedDogCard from './CloseDogCard';
 import DogForm from './DogForm';
+import NewDogForm from './NewDogForm';
 
-export default function DogCard({ formReadOnly, dogProfile, index }) {
-  const [cardOpen, setCardOpen] = useState(false);
-
+export default function DogCard({ dogProfile, index }) {
+  const [cardOpen, setCardOpen] = useState(dogProfile.id ? false : true);
+  console.log(index, { dogProfile });
   const cardClickHandler = () => {
     setCardOpen(!cardOpen);
   };
@@ -17,12 +18,22 @@ export default function DogCard({ formReadOnly, dogProfile, index }) {
   }
   // card is open generate the form
   if (cardOpen) {
-    return (
-      <DogForm
-        dogProfile={dogProfile}
-        cardHandler={cardClickHandler}
-        index={index}
-      />
-    );
+    if (dogProfile.id) {
+      return (
+        <DogForm
+          dogProfile={dogProfile}
+          cardHandler={cardClickHandler}
+          index={index}
+        />
+      );
+    } else {
+      return (
+        <NewDogForm
+          dogProfile={dogProfile}
+          cardHandler={cardClickHandler}
+          index={index}
+        />
+      );
+    }
   }
 }

@@ -9,6 +9,8 @@ const ActionType = {
   UPDATEDOG: 'UPDATEDOG',
   DELETEDOG: 'DELETEDOG',
   UPDATEUSER: 'UPDATEUSER',
+  ADDDOG: 'ADDDOG',
+  SAVENEWDOG: 'SAVENEWDOG',
 };
 
 const initialState = {
@@ -40,23 +42,42 @@ const handlers = {
   },
 
   DELETEDOG: (state, action) => {
-    const { user } = action.payload;
-
+    const { index } = action.payload;
+    let updatedDogs = state.dogs;
+    updatedDogs.splice(index, 1);
+    console.log(index, 'removed', { updatedDogs });
     return {
       ...state,
-      isAuthenticated: true,
-      user,
+      dogs: updatedDogs,
     };
   },
 
-  UPDATEUSER: (state) => ({
-    ...state,
-    isAuthenticated: false,
-    user: {
-      firstName: '',
-      lastName: '',
-    },
-  }),
+  UPDATEUSER: (state, action) => {
+    const { updatedUserProfile } = action.payload;
+    return {
+      ...state,
+      user: updatedUserProfile,
+    };
+  },
+  ADDDOG: (state, action) => {
+    const { emptyDog } = action.payload;
+    const updatedDogs = state.dogs;
+    updatedDogs.push(emptyDog);
+    return {
+      ...state,
+      dogs: updatedDogs,
+    };
+  },
+  SAVENEWDOG: (state, action) => {
+    const { savedDog, index } = action.payload;
+    const updatedDogs = state.dogs;
+    updatedDogs[index] = savedDog;
+    console.log({ updatedDogs });
+    return {
+      ...state,
+      dogs: updatedDogs,
+    };
+  },
 };
 
 // if action.type exists, then call the handler function with the same name, else just return the current state
@@ -69,6 +90,8 @@ export const ProfileContext = createContext({
   updateDog: () => Promise.resolve(),
   deleteDog: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
+  addDog: () => Promise.resolve(),
+  saveNewDog: () => Promise.resolve(),
 });
 
 export const ProfileProvider = (props) => {
@@ -105,51 +128,116 @@ export const ProfileProvider = (props) => {
   }, []);
 
   const updateDog = async (updatedDogProfile, index) => {
-    const { success, data } = await profileApi.updateDogProfile(
-      updatedDogProfile
-    );
-    if (success) {
-      dispatch({
-        type: ActionType.UPDATEDOG,
-        payload: {
-          index,
-          updatedDog: updatedDogProfile,
-        },
-      });
-      return true;
-    } else {
-      return new Error('Update failed');
+    try {
+      const { success, data } = await profileApi.updateDogProfile(
+        updatedDogProfile
+      );
+      if (success) {
+        dispatch({
+          type: ActionType.UPDATEDOG,
+          payload: {
+            index,
+            updatedDog: updatedDogProfile,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Update failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
     }
   };
 
   const deleteDog = async (dogProfile, index) => {
-    const { success } = await profileApi.deleteDog(dogProfile);
-    if (success) {
-      dispatch({
-        type: ActionType.DELETEDOG,
-        payload: {
-          index,
-        },
-      });
-    } else {
-      return new Error('Update failed');
+    try {
+      let success = true;
+      // If this was a previous saved entry with assigned dogId run the API to delete from DB
+      // if (dogProfile.id) {
+      //   const response = await profileApi.deleteDog(dogProfile.id);
+      //   success = response.success;
+      // }
+      // On successful API call or if the profile is an unsaved profile
+      // Update the context to remove the card
+      if (success || !dogProfile.id) {
+        dispatch({
+          type: ActionType.DELETEDOG,
+          payload: {
+            index,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Delete failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
     }
   };
 
-  // const updateUser = async (user) => {
-  //   await profileApi.updateUser();
-  //   dispatch({
-  //     type: ActionType.UPDATEUSER,
-  //   });
-  // };
+  const updateUser = async (updatedUserProfile) => {
+    try {
+      const { success, data } = await profileApi.updateUserProfile(
+        updatedUserProfile
+      );
+      console.log({ updatedUserProfile });
+      if (success) {
+        dispatch({
+          type: ActionType.UPDATEUSER,
+          payload: {
+            updatedUserProfile,
+          },
+        });
+      } else {
+        throw new Error('Update user failed.');
+      }
+      return success;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
 
+  const addDog = (emptyDog) => {
+    dispatch({
+      type: ActionType.ADDDOG,
+      payload: {
+        emptyDog,
+      },
+    });
+  };
+
+  const saveNewDog = async (dogProfile, index) => {
+    try {
+      const { success, data } = await profileApi.saveNewDog(dogProfile);
+      if (success) {
+        dispatch({
+          type: ActionType.SAVENEWDOG,
+          payload: {
+            index,
+            savedDog: data,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Save failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
   return (
     <ProfileContext.Provider
       value={{
         ...state,
         deleteDog,
         updateDog,
-        // updateUser,
+        updateUser,
+        addDog,
+        saveNewDog,
       }}
     >
       {children}
