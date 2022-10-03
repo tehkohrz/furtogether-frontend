@@ -6,3 +6,5 @@ export { default as DatePicker } from './DatePicker';
 export { default as AlertNotice } from './AlertNotice';
 export { default as DeleteButton } from './DeleteButton';
 export { default as AppToast } from './Toast';
+export { default as Tab } from './Tab';
+export { default as TabPanel } from './TabPanel'

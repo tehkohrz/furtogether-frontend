@@ -1,3 +1,5 @@
 export { default as PasswordInput } from './PasswordInput'
 export { default as UserInput } from './UserInput'
 export { default as ValidationChecks } from './ValidationChecks'
+export { default as TabPanels } from './TabPanels'
+export { default as TabList } from './TabsList'
