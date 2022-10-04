@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useProfile } from '../../../hooks/use-profile';
 import { Spinner, Flex, Stack, Center } from '@chakra-ui/react';
-import HumanForm from '../../organisms/HumanForm';
-import DogComponent from '../../organisms/DogComponent';
+import { HumanForm, DogComponent } from '../../organisms';
 
 const Profile = () => {
   const { user } = useProfile();
-  console.log('Profile Load', user);
   // No profile loaded keep spinning
   if (!user) {
     return <Spinner size='xl' />;
