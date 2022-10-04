@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FcGoogle } from 'react-icons/fc';
 import { Button } from '../../atoms';
 import { UserInput, PasswordInput } from '../../molecules';
 import {
@@ -152,11 +153,13 @@ const Login = ({ handleToggle }) => {
             <Stack spacing={10} pt={2}>
               <Button
                 handleClick={signInWithGoogle}
+                leftIcon = {<FcGoogle/>}
+                variant = {'outline'}
                 text='Continue with Google'
                 size='md'
-                bg={'yellow.400'}
+                bg={'yellow.500'}
                 color={'white'}
-                _hover={{ bg: 'yellow.500' }}
+                _hover={{ bg: 'yellow.600' }}
               />
             </Stack>
 
