@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Box, Button, Text, Flex } from "@chakra-ui/react";
+import { Box, Button, Text, Flex, Select } from "@chakra-ui/react";
 
 import {
   GoogleMap,
@@ -24,6 +24,8 @@ function Map() {
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [activeMarker, setActiveMarker] = useState(null);
   const [allMarkers, setAllMarkers] = useState(null);
+  const [updatingJoinCount, setUpdatingJoinCount] = useState(false);
+  const [joinUpdatedTs, setJoinUpdatedTs] = useState(0);
 
   const navigate = useNavigate();
 
@@ -42,7 +44,12 @@ function Map() {
 
   useEffect(() => {
     markers();
-  }, []);
+  }, [joinUpdatedTs]);
+
+  // useEffect(() => {
+  //   handleJoin();
+  //   markers();
+  // }, []);
 
   if (!isLoaded) {
     return <Text> Not Loading</Text>;
@@ -67,15 +74,24 @@ function Map() {
   };
 
   const handleJoin = async (marker) => {
-    const updatedNum = await axios.put(
-      process.env.REACT_APP_API_URL + `walk/join/${marker}`,
-      // {
-      //   locaton_id: marker,
-      // }
-      {},
-      { withCredentials: true }
-    );
-    navigate("/about");
+    setUpdatingJoinCount(true);
+    try {
+      const updatedNum = await axios.put(
+        process.env.REACT_APP_API_URL + `walk/join/${marker}`,
+        // {
+        //   locaton_id: marker,
+        // }
+        {},
+        { withCredentials: true }
+      );
+      setJoinUpdatedTs(Date.now())
+      // navigate("/walk/map");
+
+      // navigate("/");
+    } catch (err) {
+      console.log("cannot join propoery");
+    }
+    setUpdatingJoinCount(false);
   };
 
   if (!allMarkers) {
@@ -85,7 +101,30 @@ function Map() {
   return (
     <>
       <Flex alignItems="center">
-        <Box width="100%" height={1000}>
+        <Box width="40%" height={400} padding={4}>
+          <Flex direction="row">
+            <Box width="50%" marginBottom={2}>
+              <Select placeholder="Select option">
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">19:00</option>
+              </Select>
+            </Box>
+            <Box padding={1.5} width="50%">
+              <Button
+                colorScheme="teal"
+                size="xs"
+                // onClick={}
+              >
+                Meeting At This Time
+              </Button>
+            </Box>
+          </Flex>
           <GoogleMap
             center={center}
             zoom={15}
@@ -116,6 +155,7 @@ function Map() {
                       <div>
                         <br />
                         <Button
+                          disabled={updatingJoinCount}
                           colorScheme="teal"
                           size="xs"
                           onClick={() => handleJoin(id)}
