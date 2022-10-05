@@ -5,3 +5,4 @@ export { default as HumanForm } from './HumanForm';
 export { default as DogComponent } from './DogComponent';
 export { default as TabsComponent } from './TabsComponent';
 export { default as RoutineForm } from './RoutineForm';
+export { default as Avatar } from './Avatar'
