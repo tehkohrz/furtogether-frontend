@@ -35,37 +35,50 @@ export default function CheckField({
     );
   }
 
-  const checkboxOptions = options.map((option) => (
-    <Checkbox
-      icon={<PlusIcon />}
-      key={options.id}
-      value={option.value}
-      size='lg'
-    >
-      {option.label}
-    </Checkbox>
-  ));
-  return (
-    <Field name={fieldName} validate={validateFn}>
-      {({ field, form }) => (
-        <FormControl
-          isReadOnly={readOnly}
-          isInvalid={form.errors[fieldName] && form.touched[fieldName]}
-          isRequired={isRequired}
-        >
-          <FormLabel>{label}</FormLabel>
-          <CheckboxGroup colorScheme='cyan'>
-            <Stack
-              spracing={[1, 5]}
-              direction={['column', 'row']}
-              justifyContent={'space-evenly'}
+  const optionFields = options.map((option) => {
+    console.log(option.value);
+    return (
+      <Field
+        name={fieldName}
+        validate={validateFn}
+        type='checkbox'
+        key={option.id}
+      >
+        {({ field, form }) => (
+          <FormControl
+            isReadOnly={readOnly}
+            isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+            isRequired={isRequired}
+          >
+            <Checkbox
+              {...field}
+              icon={<PlusIcon />}
+              key={options.id}
+              value={option.value}
+              size='lg'
             >
-              {checkboxOptions}
-            </Stack>
-          </CheckboxGroup>
-          <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
-        </FormControl>
-      )}
-    </Field>
+              {option.label}
+            </Checkbox>
+            <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+          </FormControl>
+        )}
+      </Field>
+    );
+  });
+  return (
+    <CheckboxGroup colorScheme='cyan'>
+      <Stack
+        spracing={[1, 5]}
+        direction={['column', 'row']}
+        justifyContent={'space-evenly'}
+      >
+        {optionFields}
+      </Stack>
+    </CheckboxGroup>
   );
+}
+{
+  /* <Checkbox icon={<PlusIcon />} key={options.id} value={option.value} size='lg'>
+  {option.label}
+</Checkbox>; */
 }
