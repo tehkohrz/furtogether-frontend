@@ -31,8 +31,8 @@ function Map() {
     try {
       const markersDetails = await axios.get(
         // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + 'walk/map/' ,
-         { params: { startInt: newTime } } // replace int with startInt
+        process.env.REACT_APP_API_URL + `walk/map?start_int=${newTime}`,
+        //  { params: { startInt: newTime } } // replace int with startInt
       );
       console.log("markers info", markersDetails.data);
       setAllMarkers(markersDetails.data);
