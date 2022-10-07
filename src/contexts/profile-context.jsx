@@ -2,6 +2,7 @@
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { profileApi } from '../api/profile-api';
+import { routineApi } from '../api/routine-api';
 
 // single source of truth,
 const ActionType = {
@@ -11,23 +12,26 @@ const ActionType = {
   UPDATEUSER: 'UPDATEUSER',
   ADDDOG: 'ADDDOG',
   SAVENEWDOG: 'SAVENEWDOG',
+  ADDROUTINE: 'ADDROUTINE',
 };
 
 const initialState = {
   isInitialized: false,
   user: null,
   dogs: null,
+  routines: null,
 };
 
 const handlers = {
   INITIALIZE: (state, action) => {
-    const { isInitialized, dogs, user } = action.payload;
+    const { isInitialized, dogs, user, routines } = action.payload;
 
     return {
       ...state,
       isInitialized: true,
       user,
       dogs,
+      routines,
     };
   },
 
@@ -78,6 +82,15 @@ const handlers = {
       dogs: updatedDogs,
     };
   },
+  ADDROUTINE: (state, action) => {
+    const { emptyRoutine } = action.payload;
+    const updatedRoutine = state.routines;
+    updatedRoutine.push(emptyRoutine);
+    return {
+      ...state,
+      routines: updatedRoutine,
+    };
+  },
 };
 
 // if action.type exists, then call the handler function with the same name, else just return the current state
@@ -92,6 +105,7 @@ export const ProfileContext = createContext({
   updateUser: () => Promise.resolve(),
   addDog: () => Promise.resolve(),
   saveNewDog: () => Promise.resolve(),
+  addRoutine: () => Promise.resolve(),
 });
 
 export const ProfileProvider = (props) => {
@@ -101,7 +115,8 @@ export const ProfileProvider = (props) => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        let { success, data } = await profileApi.getUserProfile();
+        const { success, data } = await profileApi.getUserProfile();
+        const routineData = await routineApi.getRoutines();
         if (success) {
           dispatch({
             type: ActionType.INITIALIZE,
@@ -109,6 +124,7 @@ export const ProfileProvider = (props) => {
               isInitialized: true,
               user: data.userProfile,
               dogs: data.userProfile.dogs,
+              routines: routineData.data.userRoutines,
             },
           });
         } else {
@@ -154,10 +170,10 @@ export const ProfileProvider = (props) => {
     try {
       let success = true;
       // If this was a previous saved entry with assigned dogId run the API to delete from DB
-      // if (dogProfile.id) {
-      //   const response = await profileApi.deleteDog(dogProfile.id);
-      //   success = response.success;
-      // }
+      if (dogProfile.id) {
+        const response = await profileApi.deleteDog(dogProfile.id);
+        success = response.success;
+      }
       // On successful API call or if the profile is an unsaved profile
       // Update the context to remove the card
       if (success || !dogProfile.id) {
@@ -229,6 +245,17 @@ export const ProfileProvider = (props) => {
       return false;
     }
   };
+
+  // ROUTINES RELATED CONTEXT
+  const addRoutine = (emptyRoutine) => {
+    dispatch({
+      type: ActionType.ADDROUTINE,
+      payload: {
+        emptyRoutine,
+      },
+    });
+  };
+
   return (
     <ProfileContext.Provider
       value={{
@@ -238,6 +265,7 @@ export const ProfileProvider = (props) => {
         updateUser,
         addDog,
         saveNewDog,
+        addRoutine,
       }}
     >
       {children}

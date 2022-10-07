@@ -36,7 +36,6 @@ export default function CheckField({
   }
 
   const optionFields = options.map((option) => {
-    console.log(option.value);
     return (
       <Field
         name={fieldName}
@@ -45,28 +44,31 @@ export default function CheckField({
         key={option.id}
       >
         {({ field, form }) => (
-          <FormControl
-            isReadOnly={readOnly}
-            isInvalid={form.errors[fieldName] && form.touched[fieldName]}
-            isRequired={isRequired}
-          >
-            <Checkbox
-              {...field}
-              icon={<PlusIcon />}
-              key={options.id}
-              value={option.value}
-              size='lg'
+          <>
+            <FormControl
+              isReadOnly={readOnly}
+              isInvalid={form.errors[fieldName] && form.touched[fieldName]}
+              isRequired={isRequired}
             >
-              {option.label}
-            </Checkbox>
-            <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
-          </FormControl>
+              <Checkbox
+                {...field}
+                icon={<PlusIcon />}
+                key={options.id}
+                value={option.value}
+                size='lg'
+              >
+                {option.label}
+              </Checkbox>
+              <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+            </FormControl>
+          </>
         )}
       </Field>
     );
   });
   return (
     <CheckboxGroup colorScheme='cyan'>
+      <FormLabel>{label}</FormLabel>
       <Stack
         spracing={[1, 5]}
         direction={['column', 'row']}

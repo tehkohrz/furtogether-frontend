@@ -8,6 +8,7 @@ import {
   InputRightAddon,
   InputLeftAddon,
   InputGroup,
+  VisuallyHiddenInput,
 } from '@chakra-ui/react';
 
 const InputField = ({
@@ -18,6 +19,7 @@ const InputField = ({
   readOnly,
   addOns = { left: null, right: null },
   isRequired = false,
+  hidden = false,
 }) => {
   return (
     <Field name={fieldName} validate={validateFn}>
@@ -27,15 +29,21 @@ const InputField = ({
           isInvalid={form.errors[fieldName] && form.touched[fieldName]}
           isRequired={isRequired}
         >
-          <FormLabel>{label}</FormLabel>
-
-          {/* INPUT COMPONENT WITH LEFT AND RIGHT ADDONS  */}
-          <InputGroup>
-            {addOns.left && <InputLeftAddon>{addOns.left}</InputLeftAddon>}
-            <Input {...field} placeholder={placeHolder} />
-            {addOns.right && <InputRightAddon>{addOns.right}</InputRightAddon>}
-          </InputGroup>
-          <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+          {hidden ? (
+            <VisuallyHiddenInput {...field} />
+          ) : (
+            <>
+              <FormLabel>{label}</FormLabel>
+              <InputGroup>
+                {addOns.left && <InputLeftAddon>{addOns.left}</InputLeftAddon>}
+                <Input {...field} placeholder={placeHolder} />
+                {addOns.right && (
+                  <InputRightAddon>{addOns.right}</InputRightAddon>
+                )}
+              </InputGroup>
+              <FormErrorMessage>{form.errors[fieldName]}</FormErrorMessage>
+            </>
+          )}
         </FormControl>
       )}
     </Field>

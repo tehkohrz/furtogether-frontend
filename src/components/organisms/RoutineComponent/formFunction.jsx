@@ -64,7 +64,7 @@ export function generateRoutineFields(array, formReadOnly = false) {
 export const formArray = [
   {
     label: 'Name of Routine',
-    fieldName: 'routineName',
+    fieldName: 'name',
     placeHolder: 'Routine Name',
     validateFn: null,
     type: 'input',
@@ -112,7 +112,7 @@ export const formArray = [
   },
   {
     label: 'Location',
-    fieldName: 'locationId',
+    fieldName: 'location',
     placeHolder: 'Location',
     validateFn: null,
     type: 'input',

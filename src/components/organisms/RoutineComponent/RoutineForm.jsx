@@ -3,18 +3,14 @@ import { Center, Box, Stack, Input, FormLabel } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { Button } from '../../atoms';
 import { formArray, generateRoutineFields } from './formFunction';
-import { MapInput } from '../../organisms';
-import { useProfile } from '../../../hooks/use-profile';
+import { MapInput } from '../MapInput';
 import Geocode from 'react-geocode';
 
 Geocode.setLanguage('en');
 Geocode.setRegion('sgp');
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
-export default function RoutineForm(routine) {
-  const { user, routines } = useProfile();
-  console.log({ routines, user });
-
+export default function RoutineForm({ routine, cardHandler, index }) {
   // ?HANDLERS
   // ReadOnly handler
   const [formReadOnly, setFormReadOnly] = useState(true);
@@ -61,6 +57,7 @@ export default function RoutineForm(routine) {
   // ?FORM ATTRIBUTES
   // Initalise the initial values for formik
   const initialValues = {};
+  console.log({ routine });
   formArray.forEach((x) => {
     initialValues[x.fieldName] = routine[x.fieldName] || '';
   });
