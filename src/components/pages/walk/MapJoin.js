@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Box, Button, Text, Flex, Select } from "@chakra-ui/react";
 
 import {
@@ -22,28 +23,27 @@ function Map() {
   // eslint-disable-next-line no-unused-vars
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [activeMarker, setActiveMarker] = useState(null);
-  const [allMarkers, setAllMarkers] = useState([]);
+  const [allMarkers, setAllMarkers] = useState(null);
   const [updatingJoinCount, setUpdatingJoinCount] = useState(false);
   const [joinUpdatedTs, setJoinUpdatedTs] = useState(0);
-  const [newTime, setNewTime] = useState(7);
 
-  const handleNewTime = async () => {
+  const navigate = useNavigate();
+
+  const markers = async () => {
     try {
       const markersDetails = await axios.get(
         // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + 'walk/map/' ,
-         { params: { startInt: newTime } } // replace int with startInt
+        process.env.REACT_APP_API_URL + "walk/map"
       );
       console.log("markers info", markersDetails.data);
       setAllMarkers(markersDetails.data);
     } catch (e) {
       console.log(e);
     }
-    //setJoinUpdatedTs(Date.now())
   };
 
   useEffect(() => {
-    if (joinUpdatedTs !== 0) handleNewTime();
+    markers();
   }, [joinUpdatedTs]);
 
   // useEffect(() => {
@@ -64,11 +64,6 @@ function Map() {
   //   return headCount.data;
   // };
 
-  const handleChange = (e) => {
-    console.log('xssd', e.target.value)
-    setNewTime(Number(e.target.value));
-  };
-
   // ON CLICK HANDLER FOR THE POI MARKERS
   const handleActiveMarker = async (marker) => {
     if (marker === activeMarker) {
@@ -82,7 +77,10 @@ function Map() {
     setUpdatingJoinCount(true);
     try {
       const updatedNum = await axios.put(
-        process.env.REACT_APP_API_URL + `walk/join/${marker}?st=${newTime}`,
+        process.env.REACT_APP_API_URL + `walk/join/${marker}`,
+        // {
+        //   locaton_id: marker,
+        // }
         {},
         { withCredentials: true }
       );
@@ -96,35 +94,37 @@ function Map() {
     setUpdatingJoinCount(false);
   };
 
+  if (!allMarkers) {
+    return <div>Hello</div>;
+  }
+
   return (
     <>
       <Flex alignItems="center">
         <Box width="40%" height={400} padding={4}>
-          <form>
-            <Flex direction="row">
-              <Box width="50%" marginBottom={2}>
-                <Select placeholder="Select option" onChange={handleChange}
-                value={newTime}
-                >
-                  <option value={7}>7:00</option>
-                  <option value={8}>8:00</option>
-                  <option value={9}>9:00</option>
-                  <option value={10}>10:00</option>
-                  <option value={17}>17:00</option>
-                  <option value={18}>18:00</option>
-                  <option value={19}>19:00</option>
-                  <option value={20}>19:00</option>
-                </Select>
-              </Box>
-              <Box padding={1.5} width="50%">
-                <Button colorScheme="teal" size="xs" 
-                onClick={handleNewTime}
-                >
-                  Meeting At This Time
-                </Button>
-              </Box>
-            </Flex>
-          </form>
+          <Flex direction="row">
+            <Box width="50%" marginBottom={2}>
+              <Select placeholder="Select option">
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">19:00</option>
+              </Select>
+            </Box>
+            <Box padding={1.5} width="50%">
+              <Button
+                colorScheme="teal"
+                size="xs"
+                // onClick={}
+              >
+                Meeting At This Time
+              </Button>
+            </Box>
+          </Flex>
           <GoogleMap
             center={center}
             zoom={15}
@@ -141,7 +141,7 @@ function Map() {
               position={center}
               icon="https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png"
             />
-            {allMarkers && allMarkers.length && allMarkers.map(({ id, name, position, headCount }) => (
+            {allMarkers.map(({ id, name, position, headCount }) => (
               <Marker
                 key={id}
                 position={position}
