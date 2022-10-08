@@ -113,7 +113,7 @@ function Map() {
                   <option value={17}>17:00</option>
                   <option value={18}>18:00</option>
                   <option value={19}>19:00</option>
-                  <option value={20}>19:00</option>
+                  <option value={20}>20:00</option>
                 </Select>
               </Box>
               <Box padding={1.5} width="50%">
