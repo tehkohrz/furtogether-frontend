@@ -49,7 +49,7 @@ class RoutineApi {
 
     return new Promise((resolve, reject) => {
       try {
-        const response = apiService.delete(`/routines/delete`, routineId);
+        const response = apiService.put(`/routines/delete`, { routineId });
         console.log('Routine deleted');
         resolve(response);
       } catch (err) {
