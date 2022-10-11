@@ -99,7 +99,7 @@ function Map() {
   return (
     <>
       <Flex alignItems="center">
-        <Box width="40%" height={400} padding={4}>
+        <Box width="100%" height={400} padding={4}>
           <form>
             <Flex direction="row">
               <Box width="50%" marginBottom={2}>
