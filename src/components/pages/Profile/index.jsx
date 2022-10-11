@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useProfile } from '../../../hooks/use-profile';
 import { Spinner, Flex, Stack, Center } from '@chakra-ui/react';
-import HumanForm from '../../organisms/HumanForm';
-import DogComponent from '../../organisms/DogComponent';
+import { HumanForm, DogComponent, Avatar } from '../../organisms';
 
 const Profile = () => {
   const { user } = useProfile();
-  console.log('Profile Load', user);
   // No profile loaded keep spinning
   if (!user) {
     return <Spinner size='xl' />;
   }
 
+  // Add in column for name of image
+  const url = '0.6139596752603851.jpg'
+  
   return (
     <Center minH='`100%'>
       <Stack>
@@ -23,6 +24,8 @@ const Profile = () => {
           <DogComponent />
         </Flex>
       </Stack>
+      <Avatar url={url}
+    />
     </Center>
   );
 };

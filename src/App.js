@@ -11,7 +11,7 @@ import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
 import { Registration, Home, Profile, Map } from './components/pages';
 import { ProfileProvider } from './contexts/profile-context';
-import { ProfileTab } from './components/pages'
+import { ProfileTab, Routines } from './components/pages';
 
 import theme from './components/theme';
 
@@ -24,6 +24,14 @@ const routes = [
   {
     path: '/walk/map',
     element: <Map />,
+  },
+  {
+    path: '/routines',
+    element: (
+      <ProfileProvider>
+        <Routines />
+      </ProfileProvider>
+    ),
   },
 ];
 

@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Text, Flex, Select } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import { Box, Button, Text, Flex, Select } from '@chakra-ui/react';
 
-import {
-  GoogleMap,
-  InfoWindow,
-  Marker,
-  useJsApiLoader,
-} from "@react-google-maps/api";
-import axios from "axios";
+import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api';
+import axios from 'axios';
 
 // CENTER LOCATION FOR THE MAP?
 const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
@@ -15,9 +10,9 @@ const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
 function Map() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: ['places'],
   });
-  console.log("isLoaded", isLoaded);
+  console.log('isLoaded', isLoaded);
 
   // eslint-disable-next-line no-unused-vars
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
@@ -31,10 +26,10 @@ function Map() {
     try {
       const markersDetails = await axios.get(
         // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + `walk/map?start_int=${newTime}`,
+        process.env.REACT_APP_API_URL + `walk/map?start_int=${newTime}`
         //  { params: { startInt: newTime } } // replace int with startInt
       );
-      console.log("markers info", markersDetails.data);
+      console.log('markers info', markersDetails.data);
       setAllMarkers(markersDetails.data);
     } catch (e) {
       console.log(e);
@@ -65,7 +60,7 @@ function Map() {
   // };
 
   const handleChange = (e) => {
-    console.log('xssd', e.target.value)
+    console.log('xssd', e.target.value);
     setNewTime(Number(e.target.value));
   };
 
@@ -91,21 +86,19 @@ function Map() {
 
       // navigate("/");
     } catch (err) {
-      console.log("cannot join propoery");
+      console.log('cannot join propoery');
     }
     setUpdatingJoinCount(false);
   };
 
   return (
     <>
-      <Flex alignItems="center">
-        <Box width="40%" height={400} padding={4}>
+      <Flex alignItems='center'>
+        <Box width='40%' height={400} padding={4}>
           <form>
-            <Flex direction="row">
-              <Box width="50%" marginBottom={2}>
-                <Select placeholder="Select option" onChange={handleChange}
-                value={newTime}
-                >
+            <Flex direction='row'>
+              <Box width='50%' marginBottom={2}>
+                <Select placeholder='Select option' onChange={handleChange} value={newTime}>
                   <option value={7}>7:00</option>
                   <option value={8}>8:00</option>
                   <option value={9}>9:00</option>
@@ -116,10 +109,8 @@ function Map() {
                   <option value={20}>20:00</option>
                 </Select>
               </Box>
-              <Box padding={1.5} width="50%">
-                <Button colorScheme="teal" size="xs" 
-                onClick={handleNewTime}
-                >
+              <Box padding={1.5} width='50%'>
+                <Button colorScheme='teal' size='xs' onClick={handleNewTime}>
                   Meeting At This Time
                 </Button>
               </Box>
@@ -128,7 +119,7 @@ function Map() {
           <GoogleMap
             center={center}
             zoom={15}
-            mapContainerStyle={{ width: "100%", height: "100%" }}
+            mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
               zoomControl: false,
               streetViewControl: false,
@@ -139,35 +130,33 @@ function Map() {
           >
             <Marker
               position={center}
-              icon="https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png"
+              icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
             />
-            {allMarkers && allMarkers.length && allMarkers.map(({ id, name, position, headCount }) => (
-              <Marker
-                key={id}
-                position={position}
-                onClick={() => handleActiveMarker(id)}
-              >
-                {activeMarker === id ? (
-                  <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                    <div>
-                      <div>{name}</div>
-                      <div>Headcount {headCount}</div>
+            {allMarkers &&
+              allMarkers.length &&
+              allMarkers.map(({ id, name, position, headCount }) => (
+                <Marker key={id} position={position} onClick={() => handleActiveMarker(id)}>
+                  {activeMarker === id ? (
+                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                       <div>
-                        <br />
-                        <Button
-                          disabled={updatingJoinCount}
-                          colorScheme="teal"
-                          size="xs"
-                          onClick={() => handleJoin(id)}
-                        >
-                          Join
-                        </Button>
+                        <div>{name}</div>
+                        <div>Headcount {headCount}</div>
+                        <div>
+                          <br />
+                          <Button
+                            disabled={updatingJoinCount}
+                            colorScheme='teal'
+                            size='xs'
+                            onClick={() => handleJoin(id)}
+                          >
+                            Join
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </InfoWindow>
-                ) : null}
-              </Marker>
-            ))}
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+              ))}
           </GoogleMap>
         </Box>
       </Flex>

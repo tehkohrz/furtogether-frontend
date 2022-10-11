@@ -50,6 +50,10 @@ const Links = [
     link: '/profile',
   },
   {
+    name: 'Routines',
+    link: '/routines',
+  },
+  {
     name: 'Photo Album',
     link: '/profilerichie',
   },
@@ -103,11 +107,7 @@ function Navbar() {
             <Box>
               <img src={logo} width='40px' height='40px' alt='' />
             </Box>
-            <HStack
-              as={'nav'}
-              spacing={4}
-              display={{ base: 'none', md: 'flex' }}
-            >
+            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((link) => (
                 <NavLink key={link.name} href={link.link}>
                   {link.name}

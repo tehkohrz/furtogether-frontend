@@ -1,6 +1,5 @@
 import React from 'react';
-import InputField from '../../molecules/InputField';
-import SelectField from '../../molecules/SelectField';
+import { InputField, SelectField } from '../../molecules';
 
 // Genertate the form fields
 export function generateFields(array, formReadOnly) {
