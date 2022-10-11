@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Box, Button, Text, Flex } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Box, Button, Text, Flex } from '@chakra-ui/react';
 
 import {
   GoogleMap,
   InfoWindow,
   Marker,
   useJsApiLoader,
-} from "@react-google-maps/api";
-import axios from "axios";
+} from '@react-google-maps/api';
+import axios from 'axios';
 
 // CENTER LOCATION FOR THE MAP?
 const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
@@ -16,9 +16,9 @@ const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
 function Map() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: ['places'],
   });
-  console.log("isLoaded", isLoaded);
+  console.log('isLoaded', isLoaded);
 
   // eslint-disable-next-line no-unused-vars
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
@@ -31,9 +31,9 @@ function Map() {
     try {
       const markersDetails = await axios.get(
         // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + "walk/map"
+        process.env.REACT_APP_API_URL + 'walk/map'
       );
-      console.log("markers info", markersDetails.data);
+      console.log('markers info', markersDetails.data);
       setAllMarkers(markersDetails.data);
     } catch (e) {
       console.log(e);
@@ -75,7 +75,7 @@ function Map() {
       {},
       { withCredentials: true }
     );
-    navigate("/about");
+    navigate('/about');
   };
 
   if (!allMarkers) {
@@ -84,12 +84,12 @@ function Map() {
 
   return (
     <>
-      <Flex alignItems="center">
-        <Box width="100%" height={1000}>
+      <Flex alignItems='center'>
+        <Box width='100%' height={1000}>
           <GoogleMap
             center={center}
             zoom={15}
-            mapContainerStyle={{ width: "100%", height: "100%" }}
+            mapContainerStyle={{ width: '100%', height: '100%' }}
             options={{
               zoomControl: false,
               streetViewControl: false,
@@ -100,7 +100,7 @@ function Map() {
           >
             <Marker
               position={center}
-              icon="https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png"
+              icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
             />
             {allMarkers.map(({ id, name, position, headCount }) => (
               <Marker
@@ -116,8 +116,8 @@ function Map() {
                       <div>
                         <br />
                         <Button
-                          colorScheme="teal"
-                          size="xs"
+                          colorScheme='teal'
+                          size='xs'
                           onClick={() => handleJoin(id)}
                         >
                           Join

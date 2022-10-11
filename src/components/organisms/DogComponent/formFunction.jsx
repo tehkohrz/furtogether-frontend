@@ -1,6 +1,5 @@
 import React from 'react';
-import InputField from '../../molecules/InputField';
-import SelectField from '../../molecules/SelectField';
+import { InputField, SelectField } from '../../molecules';
 // Fields that are to be in the form
 export const formArray = [
   {
