@@ -1,20 +1,17 @@
 import React from 'react';
-import {
-  InputField,
-  SelectField,
-  CheckField,
-  TimeInput,
-} from '../../molecules';
+import { InputField, SelectField, CheckField, TimeInput } from '../../molecules';
 
 // Genertate the form fields
-export function generateRoutineFields(array, formReadOnly = false) {
-  const fields = array.map((x, index) => {
+export function generateRoutineFields(form, formReadOnly = false) {
+  const fields = [];
+  // eslint-disable-next-line no-debugger
+  for (const [key, x] of Object.entries(form)) {
     switch (x.type) {
       case 'input':
-        return (
+        fields.push(
           <InputField
             readOnly={formReadOnly}
-            key={index}
+            key={x.fieldName}
             placeHolder={x.placeHolder}
             validateFn={x.validateFn}
             fieldName={x.fieldName}
@@ -23,11 +20,12 @@ export function generateRoutineFields(array, formReadOnly = false) {
             hidden={x.hidden}
           />
         );
+        break;
       case 'select':
-        return (
+        fields.push(
           <SelectField
             readOnly={formReadOnly}
-            key={index}
+            key={x.fieldName}
             fieldName={x.fieldName}
             options={x.options}
             label={x.label}
@@ -35,34 +33,39 @@ export function generateRoutineFields(array, formReadOnly = false) {
             isRequired={x.isRequired}
           />
         );
+        break;
       case 'time':
-        return (
+        fields.push(
           <TimeInput
             readOnly={formReadOnly}
-            key={index}
+            key={x.fieldName}
             fieldName={x.fieldName}
             label={x.label}
             placeHolder={x.placeHolder}
           />
         );
+        break;
       case 'checkbox':
-        return (
+        fields.push(
           <CheckField
             readOnly={formReadOnly}
-            key={index}
+            key={x.fieldName}
             fieldName={x.fieldName}
             options={x.options}
+            checked={x.checked}
             isRequired={x.isRequired}
             label={x.label}
           />
         );
+        break;
     }
-  });
+  }
   return fields;
 }
+
 // Fields that are to be in the form
-export const formArray = [
-  {
+export const formTemplate = {
+  name: {
     label: 'Name of Routine',
     fieldName: 'name',
     placeHolder: 'Routine Name',
@@ -70,19 +73,21 @@ export const formArray = [
     type: 'input',
     isRequired: true,
   },
-  {
+  routineDogs: {
     label: 'Dogs',
-    fieldName: 'dogs',
+    fieldName: 'routineDogs',
     placeHolder: 'Routine of which dogs',
     validateFn: null,
     type: 'checkbox',
     options: [],
+    checked: [],
     isRequired: true,
   },
-  {
+  days: {
     label: 'Days',
     fieldName: 'days',
     placeHolder: '',
+    checked: [],
     options: [
       { id: 'Mon', label: 'Mon', value: 'mon' },
       { id: 'Tue', label: 'Tue', value: 'tue' },
@@ -96,27 +101,27 @@ export const formArray = [
     isRequired: true,
     type: 'checkbox',
   },
-  {
+  start_time: {
     label: 'Start Time',
-    fieldName: 'startTime',
+    fieldName: 'start_time',
     placeHolder: '',
     validateFn: null,
     type: 'time',
   },
-  {
+  end_time: {
     label: 'End Time',
-    fieldName: 'endTime',
+    fieldName: 'end_time',
     placeHolder: '',
     validateFn: null,
     type: 'time',
   },
-  {
+  locationId: {
     label: 'Location',
-    fieldName: 'location',
+    fieldName: 'locationId',
     placeHolder: 'Location',
     validateFn: null,
     type: 'input',
     isRequired: true,
     hidden: true,
   },
-];
+};

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Center, Box, Stack, Spinner } from '@chakra-ui/react';
-import { RoutineForm, RoutineComponent } from '../../organisms';
+import { RoutineComponent } from '../../organisms';
 import { useProfile } from '../../../hooks/use-profile';
 
 export default function Routine({ formReadOnly = true }) {
-  const { routines } = useProfile();
+  const { routines, dogs } = useProfile();
+  console.log({ routines });
 
   if (!routines) {
     return (
@@ -15,8 +16,7 @@ export default function Routine({ formReadOnly = true }) {
   }
   return (
     <Center height={'100%'}>
-      <RoutineForm />
-      {/* <RoutineComponent routines={routines} /> */}
+      <RoutineComponent routines={routines} dogs={dogs} />
     </Center>
   );
 }

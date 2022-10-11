@@ -13,6 +13,9 @@ const ActionType = {
   ADDDOG: 'ADDDOG',
   SAVENEWDOG: 'SAVENEWDOG',
   ADDROUTINE: 'ADDROUTINE',
+  SAVENEWROUTINE: 'SAVENEWROUTINE',
+  UPDATEROUTINE: 'UPDATEROUTINE',
+  DELETEROUTINE: 'DELETEROUTINE',
 };
 
 const initialState = {
@@ -82,13 +85,44 @@ const handlers = {
       dogs: updatedDogs,
     };
   },
+  // ROUTINES
   ADDROUTINE: (state, action) => {
     const { emptyRoutine } = action.payload;
-    const updatedRoutine = state.routines;
-    updatedRoutine.push(emptyRoutine);
+    const updatedRoutines = state.routines;
+    updatedRoutines.push(emptyRoutine);
     return {
       ...state,
-      routines: updatedRoutine,
+      routines: updatedRoutines,
+    };
+  },
+  SAVENEWROUTINE: (state, action) => {
+    const { savedRoutine, index } = action.payload;
+    const updatedRoutines = state.routines;
+    updatedRoutines[index] = savedRoutine;
+    console.log({ updatedRoutines });
+    return {
+      ...state,
+      routines: updatedRoutines,
+    };
+  },
+  UPDATEROUTINE: (state, action) => {
+    const { updatedRoutine, index } = action.payload;
+    let updatedRoutines = state.routines;
+    updatedRoutines[index] = updatedRoutine;
+    return {
+      ...state,
+      routines: updatedRoutines,
+    };
+  },
+
+  DELETEROUTINE: (state, action) => {
+    const { index } = action.payload;
+    let updatedRoutines = state.routines;
+    updatedRoutines.splice(index, 1);
+    console.log(index, 'removed', { updatedRoutines });
+    return {
+      ...state,
+      routines: updatedRoutines,
     };
   },
 };
@@ -106,6 +140,9 @@ export const ProfileContext = createContext({
   addDog: () => Promise.resolve(),
   saveNewDog: () => Promise.resolve(),
   addRoutine: () => Promise.resolve(),
+  saveNewRoutine: () => Promise.resolve(),
+  updateRoutine: () => Promise.resolve(),
+  deleteRoutine: () => Promise.resolve(),
 });
 
 export const ProfileProvider = (props) => {
@@ -145,9 +182,7 @@ export const ProfileProvider = (props) => {
 
   const updateDog = async (updatedDogProfile, index) => {
     try {
-      const { success, data } = await profileApi.updateDogProfile(
-        updatedDogProfile
-      );
+      const { success, data } = await profileApi.updateDogProfile(updatedDogProfile);
       if (success) {
         dispatch({
           type: ActionType.UPDATEDOG,
@@ -195,9 +230,7 @@ export const ProfileProvider = (props) => {
 
   const updateUser = async (updatedUserProfile) => {
     try {
-      const { success, data } = await profileApi.updateUserProfile(
-        updatedUserProfile
-      );
+      const { success, data } = await profileApi.updateUserProfile(updatedUserProfile);
       console.log({ updatedUserProfile });
       if (success) {
         dispatch({
@@ -256,6 +289,75 @@ export const ProfileProvider = (props) => {
     });
   };
 
+  const saveNewRoutine = async (newRoutine, index) => {
+    try {
+      const { success, data } = await routineApi.saveNewRoutine(newRoutine);
+      if (success) {
+        dispatch({
+          type: ActionType.SAVENEWROUTINE,
+          payload: {
+            index,
+            savedRoutine: data,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Save failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const updateRoutine = async (updatedRoutine, index) => {
+    try {
+      const { success, data } = await routineApi.updateRoutine(updatedRoutine);
+      if (success) {
+        dispatch({
+          type: ActionType.UPDATEROUTINE,
+          payload: {
+            index,
+            updatedRoutine,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Update failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const deleteRoutine = async (routineId, index) => {
+    try {
+      let success = false;
+      // If this was a previous saved entry with assigned routinId run the API to delete from DB
+      if (routineId) {
+        const response = await routineApi.deleteRoutine(routineId);
+        success = response.success;
+      }
+      // On successful API call or if the profile is an unsaved profile
+      // Update the context to remove the card
+      if (success || !routineId) {
+        dispatch({
+          type: ActionType.DELETEROUTINE,
+          payload: {
+            index,
+          },
+        });
+        return success;
+      } else {
+        throw new Error('Delete failed');
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   return (
     <ProfileContext.Provider
       value={{
@@ -266,6 +368,8 @@ export const ProfileProvider = (props) => {
         addDog,
         saveNewDog,
         addRoutine,
+        updateRoutine,
+        deleteRoutine,
       }}
     >
       {children}

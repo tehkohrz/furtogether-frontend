@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Center,
-  Flex,
-  Heading,
-  HStack,
-  Stack,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Center, Flex, Heading, HStack, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 export default function ClosedRoutineCard({ cardHandler, routine }) {
   return (
@@ -31,7 +23,7 @@ export default function ClosedRoutineCard({ cardHandler, routine }) {
         </Heading>
         {/* TEXT for more routine details */}
         <HStack>
-          {routine.dogs.map((dog) => (
+          {routine.routineDogs.map((dog) => (
             <Text key={dog.id}>{dog.name}</Text>
           ))}
         </HStack>
@@ -39,13 +31,13 @@ export default function ClosedRoutineCard({ cardHandler, routine }) {
           <Text as='b' fontSize={'md'}>
             Start Time :
           </Text>
-          <Text>{routine.startTime}</Text>
+          <Text>{routine.start_time}</Text>
         </HStack>
         <HStack>
           <Text as='b' fontSize={'md'}>
             End Time :
           </Text>
-          <Text>{routine.endTime}</Text>
+          <Text>{routine.end_time}</Text>
         </HStack>
       </Stack>
     </Center>

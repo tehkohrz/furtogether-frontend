@@ -8,7 +8,6 @@ import {
   FormControl,
   FormLabel,
   Icon,
-  Center,
 } from '@chakra-ui/react';
 
 export default function CheckField({
@@ -19,6 +18,7 @@ export default function CheckField({
   validateFn,
   readOnly,
   isRequired = false,
+  checked = [],
 }) {
   // Custom Icon plus sign
   function PlusIcon(props) {
@@ -34,14 +34,17 @@ export default function CheckField({
       </Icon>
     );
   }
-
+  // Defaultvalues set the checkboxes that are checked (Dogs that are for this routine)
+  // Values of checkboxes matching the default value will be checked
+  const defaultValues = checked;
+  // Generated each check box based on the dogs owned by the user
   const optionFields = options.map((option) => {
     return (
       <Field
         name={fieldName}
         validate={validateFn}
         type='checkbox'
-        key={option.id}
+        key={option.value}
       >
         {({ field, form }) => (
           <>
@@ -53,9 +56,11 @@ export default function CheckField({
               <Checkbox
                 {...field}
                 icon={<PlusIcon />}
-                key={options.id}
+                key={options.value}
                 value={option.value}
                 size='lg'
+                // isChecked={isChecked}
+                // defaultChecked
               >
                 {option.label}
               </Checkbox>
@@ -67,7 +72,7 @@ export default function CheckField({
     );
   });
   return (
-    <CheckboxGroup colorScheme='cyan'>
+    <CheckboxGroup colorScheme='cyan' defaultValue={defaultValues}>
       <FormLabel>{label}</FormLabel>
       <Stack
         spracing={[1, 5]}
@@ -78,9 +83,4 @@ export default function CheckField({
       </Stack>
     </CheckboxGroup>
   );
-}
-{
-  /* <Checkbox icon={<PlusIcon />} key={options.id} value={option.value} size='lg'>
-  {option.label}
-</Checkbox>; */
 }

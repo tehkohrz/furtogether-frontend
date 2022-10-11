@@ -3,7 +3,7 @@ import ClosedRoutineCard from './CloseRoutineCard';
 import RoutineForm from './RoutineForm';
 
 export default function RoutineCard({ routine, index }) {
-  const [cardOpen, setCardOpen] = useState(routine.id ? false : true);
+  const [cardOpen, setCardOpen] = useState(routine ? false : true);
   console.log(index, { routine });
   const cardClickHandler = () => {
     setCardOpen(!cardOpen);
