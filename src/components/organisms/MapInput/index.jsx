@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button } from '@chakra-ui/react';
 
-import {
-  GoogleMap,
-  InfoWindow,
-  Marker,
-  useJsApiLoader,
-} from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 
 export default function MapInput({
@@ -27,9 +22,7 @@ export default function MapInput({
   useEffect(() => {
     const markers = async () => {
       try {
-        const markersDetails = await axios.get(
-          process.env.REACT_APP_API_URL + 'walk/map'
-        );
+        const markersDetails = await axios.get(process.env.REACT_APP_API_URL + 'walk/map');
         console.log('markers info', markersDetails);
         setAllMarkers(markersDetails.data);
       } catch (e) {
@@ -81,22 +74,14 @@ export default function MapInput({
             icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
           />
           {allMarkers.map(({ id, name, position, headCount }) => (
-            <Marker
-              key={id}
-              position={position}
-              onClick={() => handleActiveMarker(id)}
-            >
+            <Marker key={id} position={position} onClick={() => handleActiveMarker(id)}>
               {activeMarker === id ? (
                 <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                   <div>
                     <div>{name}</div>
                     <div>
                       <br />
-                      <Button
-                        colorScheme='teal'
-                        size='xs'
-                        onClick={() => selectLocation(id)}
-                      >
+                      <Button colorScheme='teal' size='xs' onClick={() => selectLocation(id)}>
                         {location === id ? 'Unselect' : 'Select'}
                       </Button>
                     </div>
