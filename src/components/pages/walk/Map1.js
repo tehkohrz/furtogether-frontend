@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 // import { Box, Typography } from "@mui/material";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text } from '@chakra-ui/react';
 
 import {
   GoogleMap,
   InfoWindow,
   Marker,
   useJsApiLoader,
-} from "@react-google-maps/api";
-import axios from "axios";
+} from '@react-google-maps/api';
+import axios from 'axios';
 
 // CENTER LOCATION FOR THE MAP?
 const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
@@ -49,9 +49,9 @@ const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
 function Map() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: ['places'],
   });
-  console.log("isLoaded", isLoaded);
+  console.log('isLoaded', isLoaded);
 
   // eslint-disable-next-line no-unused-vars
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
@@ -63,11 +63,11 @@ function Map() {
     try {
       const markersDetails = await axios.get(
         // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + "walk/map"
+        process.env.REACT_APP_API_URL + 'walk/map'
       );
-      console.log("markers info", markersDetails.data);
+      console.log('markers info', markersDetails.data);
       // setEveryMarker(markers);
-      setAllMarkers (markersDetails.data);
+      setAllMarkers(markersDetails.data);
     } catch (e) {
       console.log(e);
     }
@@ -86,7 +86,7 @@ function Map() {
     const headCount = await axios.get(
       process.env.REACT_APP_API_URL + `walk/${markerIndex}`
     );
-    console.log("headCountResults", headCount.data);
+    console.log('headCountResults', headCount.data);
     return headCount.data;
   };
   // ON CLICK HANDLER FOR THE POI MARKERS
@@ -98,25 +98,25 @@ function Map() {
     setActiveMarker(marker);
   };
 
-  if(!allMarkers) {
-    return (<div>Hello</div>)
+  if (!allMarkers) {
+    return <div>Hello</div>;
   }
 
   return (
     <>
       <Box
-        // sx={{
-        //   width: "100vw",
-        //   height: 800,
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   alignItems: "center",
-        // }}
+      // sx={{
+      //   width: "100vw",
+      //   height: 800,
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   alignItems: "center",
+      // }}
       >
         <GoogleMap
           center={center}
           zoom={15}
-          mapContainerStyle={{ width: "100%", height: "100%" }}
+          mapContainerStyle={{ width: '100%', height: '100%' }}
           options={{
             zoomControl: false,
             streetViewControl: false,
@@ -129,7 +129,7 @@ function Map() {
         >
           <Marker
             position={center}
-            icon="https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png"
+            icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
           />
           {allMarkers.map(({ id, name, position, headCount }) => (
             <Marker
