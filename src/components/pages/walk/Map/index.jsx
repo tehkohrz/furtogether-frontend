@@ -1,138 +1,149 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Box, Button, Text, Flex } from '@chakra-ui/react';
-
-import {
-  GoogleMap,
-  InfoWindow,
-  Marker,
-  useJsApiLoader,
-} from '@react-google-maps/api';
+import { Box, Center, Flex, Select } from '@chakra-ui/react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
+import { LocationMarker } from '../../../molecules';
 
 // CENTER LOCATION FOR THE MAP?
 const center = { lat: 1.2983000336922557, lng: 103.82741106870155 };
 
-function Map() {
+export default function Map() {
+  const [map, setMap] = useState(null);
+  const [activeMarker, setActiveMarker] = useState(null);
+  const [allMarkers, setAllMarkers] = useState(null);
+  const [timeFilter, setTimeFilter] = useState('07:00');
+  const [userDaily, setUserDaily] = useState(null);
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ['places'],
   });
-  console.log('isLoaded', isLoaded);
 
-  // eslint-disable-next-line no-unused-vars
-  const [map, setMap] = useState(/** @type google.maps.Map */ (null));
-  const [activeMarker, setActiveMarker] = useState(null);
-  const [allMarkers, setAllMarkers] = useState(null);
+  // ?API CALLS AND EFFECTS TO LOAD INFO
+  useEffect(() => {
+    getAllDaily();
+    getUserDaily();
+  }, []);
 
-  const navigate = useNavigate();
-
-  const markers = async () => {
+  // Gets the user's current db daily record
+  async function getUserDaily() {
     try {
-      const markersDetails = await axios.get(
-        // eslint-disable-next-line no-undef
-        process.env.REACT_APP_API_URL + 'walk/map'
+      // New user wont have a record no need to throw error
+      const { data } = await axios.get(process.env.REACT_APP_API_URL + `walk/user`, {
+        withCredentials: true,
+      });
+      if (data.userDaily) {
+        setUserDaily(data.userDaily.locationId);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Get all the daily routines for all locations
+  async function getAllDaily() {
+    try {
+      const { data } = await axios.post(
+        process.env.REACT_APP_API_URL + `walk/map`,
+        {
+          timeFilter,
+        },
+        {
+          withCredentials: true,
+        }
       );
-      console.log('markers info', markersDetails.data);
-      setAllMarkers(markersDetails.data);
+      const locations = data.locations.map((location) => {
+        const entry = {
+          id: location.id,
+          dailies: location.dailies,
+          position: { lat: location.latitude, lng: location.longitude },
+          name: location.name,
+          postal: location.postal,
+        };
+        return entry;
+      });
+      setAllMarkers(locations);
     } catch (e) {
       console.log(e);
     }
-  };
-
-  useEffect(() => {
-    markers();
-  }, []);
-
-  if (!isLoaded) {
-    return <Text> Not Loading</Text>;
   }
 
-  // const getCount = async (markerIndex) => {
-  //   // eslint-disable-next-line no-undef
-  //   const headCount = await axios.get(
-  //     process.env.REACT_APP_API_URL + `walk/${markerIndex}`
-  //   );
-  //   console.log("headCountResults", headCount.data);
-  //   return headCount.data;
-  // };
-
-  // ON CLICK HANDLER FOR THE POI MARKERS
-  const handleActiveMarker = async (marker) => {
-    if (marker === activeMarker) {
-      return;
-    }
-    // await getCount(marker);
-    setActiveMarker(marker);
+  // ?TIME FILTER
+  // Set the new time filter and closes the active window to reset the values
+  const handleSelectChange = (e) => {
+    setTimeFilter(e.target.value);
+    setActiveMarker(null);
   };
-
-  const handleJoin = async (marker) => {
-    const updatedNum = await axios.put(
-      process.env.REACT_APP_API_URL + `walk/join/${marker}`,
-      // {
-      //   locaton_id: marker,
-      // }
-      {},
-      { withCredentials: true }
-    );
-    navigate('/about');
-  };
-
-  if (!allMarkers) {
-    return <div>Hello</div>;
-  }
+  const TimeSelect = generateTimeSelect(handleSelectChange);
 
   return (
     <>
       <Flex alignItems='center'>
-        <Box width='100%' height={1000}>
-          <GoogleMap
-            center={center}
-            zoom={15}
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            options={{
-              zoomControl: false,
-              streetViewControl: false,
-              mapTypeControl: false,
-              fullscreenControl: false,
-            }}
-            onLoad={(map) => setMap(map)}
-          >
-            <Marker
-              position={center}
-              icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
-            />
-            {allMarkers.map(({ id, name, position, headCount }) => (
+        <Box width='100%' height={'90vh'} padding={4}>
+          <Center marginBottom={2}>{TimeSelect}</Center>
+          {isLoaded && (
+            <GoogleMap
+              center={center}
+              zoom={15}
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+              options={{
+                zoomControl: false,
+                streetViewControl: false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+              }}
+              onLoad={(map) => setMap(map)}
+            >
               <Marker
-                key={id}
-                position={position}
-                onClick={() => handleActiveMarker(id)}
-              >
-                {activeMarker === id ? (
-                  <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                    <div>
-                      <div>{name}</div>
-                      <div>Headcount {headCount}</div>
-                      <div>
-                        <br />
-                        <Button
-                          colorScheme='teal'
-                          size='xs'
-                          onClick={() => handleJoin(id)}
-                        >
-                          Join
-                        </Button>
-                      </div>
-                    </div>
-                  </InfoWindow>
-                ) : null}
-              </Marker>
-            ))}
-          </GoogleMap>
+                position={center}
+                icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
+              />
+              {allMarkers?.map((marker) => {
+                let activeInfo = false;
+                if (marker.id == activeMarker) {
+                  activeInfo = true;
+                }
+                return (
+                  <LocationMarker
+                    key={marker.id}
+                    marker={marker}
+                    timeFilter={timeFilter}
+                    joinedMarker={userDaily == marker.id ? true : false}
+                    setUserDaily={setUserDaily}
+                    activeInfo={activeInfo}
+                    setActiveMarker={setActiveMarker}
+                  />
+                );
+              })}
+            </GoogleMap>
+          )}
         </Box>
       </Flex>
     </>
   );
 }
 
-export default Map;
+// Generate time filter
+function generateTimeSelect(handleChange) {
+  const timeOptions = [];
+  for (let i = 0; i < 24; i += 1) {
+    let label = `${i}:00`;
+    if (i < 10) {
+      label = `0${i}:00`;
+    }
+    const option = <option value={label}>{label}</option>;
+    timeOptions.push(option);
+  }
+  return (
+    <Select
+      textAlign={'center'}
+      fontSize={'xl'}
+      size={'lg'}
+      placeholder='Select Time'
+      onChange={handleChange}
+      defaultValue='07:00'
+    >
+      {timeOptions}
+    </Select>
+  );
+}

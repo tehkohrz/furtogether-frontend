@@ -42,8 +42,8 @@ const Links = [
     link: '/friends',
   },
   {
-    name: 'HotSpots',
-    link: '/hotspots',
+    name: 'Daily Walk',
+    link: '/map',
   },
   {
     name: 'My Info',
