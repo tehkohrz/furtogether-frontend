@@ -18,6 +18,7 @@ import {
   useColorModeValue,
   Stack,
   useColorMode,
+  Text,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 
@@ -70,6 +71,9 @@ const NavLink = ({ children, href, onClick }) => (
     }}
     href={href}
     onClick={onClick}
+    color='teal.400'
+    fontSize='1xl'
+    fontWeight='bold'
   >
     {children}
   </Link>
@@ -94,7 +98,7 @@ function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} w='100%' pos='sticky'>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
@@ -104,6 +108,9 @@ function Navbar() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
+            <Text as='b' color='teal.100' fontSize='4xl'>
+              FurTogether
+            </Text>
             <Box>
               <img src={logo} width='40px' height='40px' alt='' />
             </Box>

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useAuth } from './hooks/use-auth';
 import { Navbar, PhotoAlbum } from './components/organisms';
@@ -75,11 +69,7 @@ function App() {
         <Router basename='/'>
           <Routes>
             {routes.map((route) => (
-              <Route
-                key={route}
-                path={route.path}
-                element={route.element}
-              ></Route>
+              <Route key={route} path={route.path} element={route.element}></Route>
             ))}
             {authenticatedRoutes.map((route) => (
               <Route

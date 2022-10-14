@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Center, Box, Stack, Input, FormLabel } from '@chakra-ui/react';
+import { CloseButton, Box, Stack, Input, FormLabel, Flex } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import { Button, AppToast } from '../../atoms';
 import { formTemplate, generateRoutineFields } from './formFunction';
-import { MapInput } from '../MapInput';
+import { MapInput } from '../../organisms';
 import Geocode from 'react-geocode';
 import { useProfile } from '../../../hooks/use-profile';
 
@@ -26,7 +26,9 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
 
   // Postal Code search input for map
   // sets map center to currently selected location if it is populated
-  const [mapCenter, setMapCenter] = useState(routine?.locationId || undefined);
+  const [mapCenter, setMapCenter] = useState(
+    routine?.position || { lat: 1.2983000336922557, lng: 103.82741106870155 }
+  );
   async function mapCenterChange(event) {
     const newPostal = event.target.value;
     const { results } = await Geocode.fromAddress(String(newPostal));
@@ -36,7 +38,7 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
   }
 
   // Marker Handler to set locationId for form
-  const [locationId, setLocationId] = useState(null);
+  const [locationId, setLocationId] = useState(routine?.locationId || null);
 
   // Save handler for routine
   async function handleSave(values, actions) {
@@ -44,7 +46,9 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
       const updatedRoutine = {
         id: routine?.id,
         ...values,
+        locationId,
       };
+      console.log({ updatedRoutine });
       // Checking if this is a new form and change API call
       let success = false;
       // Id exist run the update API
@@ -76,7 +80,9 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
       if (!success) {
         throw new Error(`Could not delete the routine.`);
       }
-      feedBack.deleted();
+      if (routineId) {
+        feedBack.deleted();
+      }
     } catch (err) {
       feedBack.error(err);
     }
@@ -102,7 +108,7 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
   const FormFields = generateRoutineFields(form, formReadOnly);
 
   return (
-    <Center minH='`100%' minW='50%'>
+    <Flex w='80vh' grow='1'>
       <Box flex='1'>
         <Formik initialValues={initialValues} onSubmit={handleSave}>
           {(props) => (
@@ -114,14 +120,10 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
                   type='number'
                   onBlur={mapCenterChange}
                   placeholder='Search for a location by postal code'
-                  value={routine && routine.locationPostal}
+                  defaultValue={routine && routine.locationPostal}
                 />
 
-                {/* <MapInput
-                  setLocation={setLocationId}
-                  location={locationId}
-                  center={mapCenter}
-                /> */}
+                <MapInput setLocation={setLocationId} location={locationId} center={mapCenter} />
                 {formReadOnly ? (
                   <Button handleClick={toggleReadOnly} text='Edit' />
                 ) : (
@@ -136,7 +138,8 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
           )}
         </Formik>
       </Box>
-    </Center>
+      <CloseButton size='md' onClick={cardHandler} />
+    </Flex>
   );
 }
 

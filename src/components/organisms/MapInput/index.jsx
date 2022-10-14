@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Text, Stack } from '@chakra-ui/react';
 
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
@@ -11,7 +11,7 @@ export default function MapInput({
 }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: [process.env.REACT_APP_GOOGLE_LIBRARIES],
+    libraries: ['places'],
   });
 
   const [currentMap, setCurrentMap] = useState(null);
@@ -20,19 +20,27 @@ export default function MapInput({
 
   // Loads the markers of walking spots
   useEffect(() => {
-    const markers = async () => {
+    const getMarkers = async () => {
       try {
-        const markersDetails = await axios.get(process.env.REACT_APP_API_URL + 'walk/map');
-        console.log('markers info', markersDetails);
-        setAllMarkers(markersDetails.data);
+        const { data } = await axios.get(process.env.REACT_APP_API_URL + 'walk/markers');
+        const markers = data.locations.map((location) => {
+          const entry = {
+            id: location.id,
+            position: { lat: location.latitude, lng: location.longitude },
+            name: location.name,
+            postal: location.postal,
+          };
+          return entry;
+        });
+        setAllMarkers(markers);
       } catch (e) {
         console.log(e);
       }
     };
-    markers();
+    getMarkers();
   }, []);
   if (!allMarkers) {
-    return <div>No Markers</div>;
+    return <Text>No Markers</Text>;
   }
 
   // ?HANDLERS
@@ -53,44 +61,46 @@ export default function MapInput({
       setLocation(id);
     }
   }
-
   return (
     <>
       <Box width='100%' height={'50vh'}>
-        <GoogleMap
-          center={center}
-          zoom={15}
-          mapContainerStyle={{ width: '100%', height: '100%' }}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
-          onLoad={(currentMap) => setCurrentMap(currentMap)}
-        >
-          <Marker
-            position={center}
-            icon='https://maps.gstatic.com/mapfiles/ms2/micons/lightblue.png'
-          />
-          {allMarkers.map(({ id, name, position, headCount }) => (
-            <Marker key={id} position={position} onClick={() => handleActiveMarker(id)}>
-              {activeMarker === id ? (
-                <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                  <div>
-                    <div>{name}</div>
-                    <div>
-                      <br />
-                      <Button colorScheme='teal' size='xs' onClick={() => selectLocation(id)}>
-                        {location === id ? 'Unselect' : 'Select'}
-                      </Button>
-                    </div>
-                  </div>
-                </InfoWindow>
-              ) : null}
-            </Marker>
-          ))}
-        </GoogleMap>
+        {isLoaded && (
+          <GoogleMap
+            center={center}
+            zoom={15}
+            mapContainerStyle={{ width: '100%', height: '100%' }}
+            options={{
+              zoomControl: false,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: false,
+            }}
+            onLoad={(currentMap) => setCurrentMap(currentMap)}
+          >
+            {allMarkers.map(({ id, name, position }) => (
+              <Marker key={id} position={position} onClick={() => handleActiveMarker(id)}>
+                {activeMarker === id ? (
+                  <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                    <Stack direction='column'>
+                      <Text as='b' fontSize={'md'} color={'black'}>
+                        {name}
+                      </Text>
+                      {location === id ? (
+                        <Button colorScheme={'red'} size='xs' onClick={() => selectLocation(id)}>
+                          Unselect
+                        </Button>
+                      ) : (
+                        <Button colorScheme={'teal'} size='xs' onClick={() => selectLocation(id)}>
+                          Select
+                        </Button>
+                      )}
+                    </Stack>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+            ))}
+          </GoogleMap>
+        )}
       </Box>
     </>
   );

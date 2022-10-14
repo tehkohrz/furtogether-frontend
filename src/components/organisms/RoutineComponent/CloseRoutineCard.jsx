@@ -3,7 +3,7 @@ import { Center, Flex, Heading, HStack, Stack, Text, useColorModeValue } from '@
 
 export default function ClosedRoutineCard({ cardHandler, routine }) {
   return (
-    <Center py={6} onClick={cardHandler}>
+    <Center py={6} onClick={cardHandler} w='80%'>
       <Stack
         borderWidth='1px'
         borderRadius='lg'
@@ -18,7 +18,7 @@ export default function ClosedRoutineCard({ cardHandler, routine }) {
         justifyContent='center'
         alignItems='center'
       >
-        <Heading as='u' fontSize={'2xl'} fontFamily={'body'} color='blue.600'>
+        <Heading as='u' fontSize={'2xl'} fontFamily={'body'} color='teal.400'>
           {routine.name}
         </Heading>
         {/* TEXT for more routine details */}

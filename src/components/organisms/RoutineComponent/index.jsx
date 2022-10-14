@@ -12,7 +12,7 @@ export default function RoutineComponent({ routines }) {
     return <RoutineCard key={key} routine={routine} index={index} />;
   });
   return (
-    <Stack direction={'column'}>
+    <Stack direction={'column'} flexGrow='1' padding='10px' alignItems={'center'}>
       {routineCards}
       <AddRoutineCard />
     </Stack>

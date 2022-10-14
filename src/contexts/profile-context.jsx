@@ -342,6 +342,7 @@ export const ProfileProvider = (props) => {
       // On successful API call or if the profile is an unsaved profile
       // Update the context to remove the card
       if (success || !routineId) {
+        success = true;
         dispatch({
           type: ActionType.DELETEROUTINE,
           payload: {
@@ -370,6 +371,7 @@ export const ProfileProvider = (props) => {
         addRoutine,
         updateRoutine,
         deleteRoutine,
+        saveNewRoutine,
       }}
     >
       {children}

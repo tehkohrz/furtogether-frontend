@@ -10,7 +10,7 @@ export default function AddRoutineCard() {
     addRoutine(null);
   }
   return (
-    <Center py={6} onClick={cardHandler}>
+    <Center py={6} onClick={cardHandler} w='80%'>
       <Stack
         borderWidth='1px'
         borderRadius='lg'

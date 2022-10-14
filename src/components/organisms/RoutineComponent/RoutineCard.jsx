@@ -4,25 +4,16 @@ import RoutineForm from './RoutineForm';
 
 export default function RoutineCard({ routine, index }) {
   const [cardOpen, setCardOpen] = useState(routine ? false : true);
-  console.log(index, { routine });
   const cardClickHandler = () => {
     setCardOpen(!cardOpen);
   };
 
   // card not not open generate the avatar card
   if (!cardOpen) {
-    return (
-      <ClosedRoutineCard cardHandler={cardClickHandler} routine={routine} />
-    );
+    return <ClosedRoutineCard cardHandler={cardClickHandler} routine={routine} />;
   }
   // card is open generate the form
   if (cardOpen) {
-    return (
-      <RoutineForm
-        routine={routine}
-        cardHandler={cardClickHandler}
-        index={index}
-      />
-    );
+    return <RoutineForm routine={routine} cardHandler={cardClickHandler} index={index} />;
   }
 }
