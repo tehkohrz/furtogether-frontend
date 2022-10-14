@@ -59,14 +59,12 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
   // Initalise the initial values for formik
   const initialValues = {};
 
-  formArray.forEach(
-    (x) => (initialValues[x.fieldName] = dogProfile[x.fieldName] || '')
-  );
+  formArray.forEach((x) => (initialValues[x.fieldName] = dogProfile[x.fieldName] || ''));
   // Genertates and array of jsx for form fields
   const FormFields = generateFields(formArray, formReadOnly);
 
   return (
-    <Flex>
+    <Flex w='80%' grow='1'>
       <Box flex='1'>
         <Formik initialValues={initialValues} onSubmit={handleSave}>
           {(props) => (
@@ -78,16 +76,8 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
                   <Button handleClick={toggleReadOnly} text='Edit' />
                 ) : (
                   <Stack direction={'row'}>
-                    <Button
-                      handleClick={props.submitForm}
-                      text='Save'
-                      bg='green'
-                    />
-                    <Button
-                      handleClick={props.handleReset}
-                      text='Reset'
-                      bg='salmon'
-                    />
+                    <Button handleClick={props.submitForm} text='Save' bg='green' />
+                    <Button handleClick={props.handleReset} text='Reset' bg='salmon' />
                     <Button handleClick={handleDelete} text='Delete' bg='red' />
                   </Stack>
                 )}

@@ -11,17 +11,10 @@ export default function DogComponent({ formReadOnly }) {
     // Need to assign unique key so that when the card is deleted the context recognises which to
     // remove and the state to keep. UUID used to generate for empty cards
     const key = uuidv4();
-    return (
-      <DogCard
-        formReadOnly={formReadOnly}
-        key={key}
-        dogProfile={dog}
-        index={index}
-      />
-    );
+    return <DogCard formReadOnly={formReadOnly} key={key} dogProfile={dog} index={index} />;
   });
   return (
-    <Stack direction={'column'}>
+    <Stack direction={'column'} w='80%'>
       {dogCards}
       <AddDogCard />
     </Stack>

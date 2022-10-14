@@ -40,13 +40,11 @@ export default function HumanForm({ userProfile }) {
   // ?FORM ATTRIBUTE
   // Initalise the initial values for formik
   const initialValues = {};
-  formArray.forEach(
-    (x) => (initialValues[x.fieldName] = userProfile[x.fieldName])
-  );
+  formArray.forEach((x) => (initialValues[x.fieldName] = userProfile[x.fieldName]));
   const FormFields = generateFields(formArray, formReadOnly);
 
   return (
-    <Box flex='1'>
+    <Box flex='1' w='80%'>
       <Formik initialValues={initialValues} onSubmit={handleSave}>
         {(props) => (
           <Form>
@@ -56,16 +54,8 @@ export default function HumanForm({ userProfile }) {
                 <Button handleClick={toggleReadOnly} text='Edit' />
               ) : (
                 <Stack direction={'row'}>
-                  <Button
-                    handleClick={props.submitForm}
-                    text='Save'
-                    bg='green'
-                  />
-                  <Button
-                    handleClick={props.handleReset}
-                    text='Reset'
-                    bg='salmon'
-                  />
+                  <Button handleClick={props.submitForm} text='Save' bg='green' />
+                  <Button handleClick={props.handleReset} text='Reset' bg='salmon' />
                   {/* <Button handleClick={deleteHandler} text='Delete' bg='red' /> */}
                 </Stack>
               )}
