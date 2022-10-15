@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Stack, Box, useColorModeValue, Heading, Text, Tabs } from '@chakra-ui/react'
 import { supabase } from '../../../supabaseClient'
+import { MultiplePhotoUpload } from '../../organisms';
 
 
 const PhotoAlbum = ({ url, size, onUpload }) => {
@@ -63,35 +64,10 @@ return (
   <Flex minH={'100vh'} align={'stretch'} justify={'flex-start'} bg={useColorModeValue('teal.100', 'teal.600')} direction={'column'}>
     <Box rounded={'lg'} bg={useColorModeValue('cyan.500', 'teal.800')} boxShadow={'lg'} p={8}>
       <p> Placeholder for multer upload and picture display </p>
-      
     </Box>
+    <MultiplePhotoUpload/>
   </Flex>
-  <div style={{ width: size }} aria-live="polite">
-      <img
-        src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
-        alt={avatarUrl ? 'Avatar' : 'No image'}
-        className="avatar image"
-        style={{ height: size, width: size }}
-      />
-      {uploading ? (
-        'Uploading...'
-      ) : (
-        <>
-          <label className="button primary block" htmlFor="single">
-            Upload an avatar
-          </label>
-          <div className="visually-hidden">
-            <input
-              type="file"
-              id="single"
-              accept="image/*"
-              onChange={uploadAvatar}
-              disabled={uploading}
-            />
-          </div>
-        </>
-      )}
-    </div>
+
   </>
 )
 

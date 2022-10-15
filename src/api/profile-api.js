@@ -70,6 +70,31 @@ class ProfileApi {
       }
     });
   }
+  async uploadAvatar(filePath) {
+    return new Promise((resolve, reject) => {
+      try {
+        const response = apiService.post(`/profile/createAvatar`, filePath);
+        console.log('Avatar uploaded')
+        resolve(response)
+      } catch (err){
+        console.error('[Profile Api]: ', err);
+        reject(new Error('Internal server error'));
+      }
+    })
+  }
+
+  async retrieveAvatar() {
+    return new Promise((resolve, reject) => {
+      try {
+        const response = apiService.get(`/profile/getAvatar`);
+        console.log('Avatar retrieved')
+        resolve(response)
+      } catch (err){
+        console.error('[Profile Api]: ', err);
+        reject(new Error('Internal server error'));
+      }
+    })
+  }
 }
 
 export const profileApi = new ProfileApi();

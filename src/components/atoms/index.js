@@ -8,3 +8,4 @@ export { default as DeleteButton } from './DeleteButton';
 export { default as AppToast } from './Toast';
 export { default as Tab } from './Tab';
 export { default as TabPanel } from './TabPanel'
+export { default as MultipleFileUpload } from './MultipleFileUpload'
