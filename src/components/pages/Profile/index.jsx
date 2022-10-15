@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useProfile } from '../../../hooks/use-profile';
-import { Spinner, Flex, Stack, Center, Text } from '@chakra-ui/react';
+import { Spinner, Flex, Stack, Center, Text, Box } from '@chakra-ui/react';
 import { HumanForm, DogComponent, Avatar } from '../../organisms';
+import { profileApi } from '../../../api/profile-api';
 
 const Profile = () => {
   const { user } = useProfile();
@@ -10,8 +11,20 @@ const Profile = () => {
     return <Spinner size='xl' />;
   }
 
-  // Add in column for name of image
-  const url = '0.6139596752603851.jpg';
+  const [url, setUrl] = useState(null)
+
+  useEffect(()=> {
+    const fetchPicture = async () => {
+
+      // Get the data from database
+      const profileRetrieve = await profileApi.retrieveAvatar()
+      const avatar = profileRetrieve['data']['avatar_url']
+      setUrl(avatar)
+    }
+
+    fetchPicture()
+  }, [])
+  
 
   return (
     <Center h='`100%'>
@@ -19,6 +32,9 @@ const Profile = () => {
         <Text as='u' fontWeight='bold' fontSize='3rem' color='teal.400'>
           Your Profile
         </Text>
+        <Box justify={'center'} align={'center'}>
+        <Avatar url={url} />
+        </Box>
         <Flex align={'top'} justify={'center'} width={'100%'}>
           <HumanForm userProfile={user} />
         </Flex>
@@ -29,7 +45,7 @@ const Profile = () => {
           <DogComponent />
         </Flex>
       </Stack>
-      <Avatar url={url} />
+      
     </Center>
   );
 };

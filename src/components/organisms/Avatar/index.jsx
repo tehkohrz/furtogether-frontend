@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabaseClient'
 import { Box, Image, Input } from '@chakra-ui/react'
+import { profileApi } from '../../../api/profile-api'
 
 const Avatar = ({ url, size }) => {
   const [avatarUrl, setAvatarUrl] = useState(null)
@@ -42,7 +43,9 @@ const Avatar = ({ url, size }) => {
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random()}.${fileExt}`
       const filePath = `${fileName}`
-
+      
+      const resp = await profileApi.uploadAvatar({filePath})
+      console.log(resp)
 
       let { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -71,7 +74,7 @@ const Avatar = ({ url, size }) => {
       ) : (
         <>
           <label className="button primary block" htmlFor="single">
-            Upload an avatar
+            {avatarUrl ? 'Edit your avatar' : 'Upload an avatar'}
           </label>
           <Input width="auto" size="md" type="file" id="single" accept="image/*" onChange={uploadAvatar} disabled={uploading} style={{display: "none"}}/>
         </>

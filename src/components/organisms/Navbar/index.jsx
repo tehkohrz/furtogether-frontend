@@ -111,9 +111,9 @@ function Navbar() {
             <Text as='b' color='teal.100' fontSize='4xl'>
               FurTogether
             </Text>
-            <Box>
+            {/* <Box>
               <img src={logo} width='40px' height='40px' alt='' />
-            </Box>
+            </Box> */}
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((link) => (
                 <NavLink key={link.name} href={link.link}>

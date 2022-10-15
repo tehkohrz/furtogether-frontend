@@ -7,3 +7,4 @@ export { default as TabsComponent } from './TabsComponent';
 export { default as Avatar } from './Avatar';
 export { default as MapInput } from './MapInput';
 export { default as RoutineComponent } from './RoutineComponent';
+export { default as MultiplePhotoUpload } from './MultiplePhotoUpload'
