@@ -6,12 +6,12 @@ import { generateFields, formArray } from './formFunction';
 import { useProfile } from '../../../hooks/use-profile';
 
 // Takes in one entry from the dog array to generate one dog form
-export default function DogForm({ dogProfile, cardHandler, index }) {
-  const { updateDog, deleteDog } = useProfile();
+export default function DogForm({ dogProfile = null, cardHandler, index }) {
+  const { updateDog, deleteDog, saveNewDog } = useProfile();
 
   // ?HANDLERS
   // Read only toggle for the form
-  const [formReadOnly, setFormReadOnly] = useState(true);
+  const [formReadOnly, setFormReadOnly] = useState(dogProfile ? true : false);
   function toggleReadOnly(formReset = null) {
     if (!formReadOnly && formReset) {
       formReset();
@@ -23,12 +23,16 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
   async function handleSave(values, actions) {
     try {
       const updatedDogProfile = {
-        id: dogProfile.id,
-        userId: dogProfile.userId,
+        id: dogProfile?.id,
         ...values,
       };
-      console.log(updatedDogProfile);
-      const success = await updateDog(updatedDogProfile, index);
+      // Checking if this is a new form and change API call
+      let success = false;
+      if (updatedDogProfile.id) {
+        success = await updateDog(updatedDogProfile, index);
+      } else {
+        success = await saveNewDog(updatedDogProfile, index);
+      }
       // Respond with toast for feedback
       if (!success) {
         throw new Error(`Could not update ${dogProfile.dog}'s profile.`);
@@ -45,9 +49,13 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
   // Delete the dog card
   async function handleDelete() {
     try {
-      const success = await deleteDog(dogProfile, index);
+      const dogId = dogProfile?.id;
+      const success = await deleteDog(dogId, index);
       if (!success) {
         throw new Error(`Could not delete ${dogProfile.dog}'s profile.`);
+      }
+      if (dogId) {
+        feedBack.delete(dogProfile.dog);
       }
     } catch (err) {
       // change form back to readOnly and update the card rendering
@@ -59,7 +67,9 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
   // Initalise the initial values for formik
   const initialValues = {};
 
-  formArray.forEach((x) => (initialValues[x.fieldName] = dogProfile[x.fieldName] || ''));
+  formArray.forEach(
+    (x) => (initialValues[x.fieldName] = dogProfile ? dogProfile[x.fieldName] : '')
+  );
   // Genertates and array of jsx for form fields
   const FormFields = generateFields(formArray, formReadOnly);
 
@@ -86,7 +96,7 @@ export default function DogForm({ dogProfile, cardHandler, index }) {
           )}
         </Formik>
       </Box>
-      <CloseButton size='md' onClick={cardHandler} />
+      <CloseButton size='md' onClick={dogProfile ? cardHandler : handleDelete} />
     </Flex>
   );
 }
@@ -107,6 +117,15 @@ const feedBack = {
       title: 'Try again!',
       description: err.message,
       status: 'error',
+      position: 'bottom-right',
+      duration: 5000,
+    });
+  },
+  delete: (name) => {
+    AppToast({
+      title: 'Deleted!',
+      description: `${name}'s profile was deleted.`,
+      status: 'success',
       position: 'bottom-right',
       duration: 5000,
     });

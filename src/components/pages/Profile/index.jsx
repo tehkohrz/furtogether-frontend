@@ -5,26 +5,24 @@ import { HumanForm, DogComponent, Avatar } from '../../organisms';
 import { profileApi } from '../../../api/profile-api';
 
 const Profile = () => {
-  const { user } = useProfile();
+  const { user, dogs } = useProfile();
   // No profile loaded keep spinning
   if (!user) {
     return <Spinner size='xl' />;
   }
 
-  const [url, setUrl] = useState(null)
+  const [url, setUrl] = useState(null);
 
-  useEffect(()=> {
+  useEffect(() => {
     const fetchPicture = async () => {
-
       // Get the data from database
-      const profileRetrieve = await profileApi.retrieveAvatar()
-      const avatar = profileRetrieve['data']['avatar_url']
-      setUrl(avatar)
-    }
+      const profileRetrieve = await profileApi.retrieveAvatar();
+      const avatar = profileRetrieve['data']['avatar_url'];
+      setUrl(avatar);
+    };
 
-    fetchPicture()
-  }, [])
-  
+    fetchPicture();
+  }, []);
 
   return (
     <Center h='`100%'>
@@ -33,7 +31,7 @@ const Profile = () => {
           Your Profile
         </Text>
         <Box justify={'center'} align={'center'}>
-        <Avatar url={url} />
+          <Avatar url={url} />
         </Box>
         <Flex align={'top'} justify={'center'} width={'100%'}>
           <HumanForm userProfile={user} />
@@ -42,10 +40,9 @@ const Profile = () => {
           Dogs
         </Text>
         <Flex align={'top'} justify={'center'}>
-          <DogComponent />
+          <DogComponent dogs={dogs} />
         </Flex>
       </Stack>
-      
     </Center>
   );
 };

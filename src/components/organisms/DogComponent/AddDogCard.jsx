@@ -8,7 +8,7 @@ export default function AddDogCard() {
   const { addDog } = useProfile();
   // ?HANDLER
   function cardHandler() {
-    addDog(generateEmptyForm());
+    addDog(null);
   }
   return (
     <Center py={6} onClick={cardHandler} w='80%'>
