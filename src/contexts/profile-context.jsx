@@ -79,7 +79,6 @@ const handlers = {
     const { savedDog, index } = action.payload;
     const updatedDogs = state.dogs;
     updatedDogs[index] = savedDog;
-    console.log({ updatedDogs });
     return {
       ...state,
       dogs: updatedDogs,
@@ -99,7 +98,6 @@ const handlers = {
     const { savedRoutine, index } = action.payload;
     const updatedRoutines = state.routines;
     updatedRoutines[index] = savedRoutine;
-    console.log({ updatedRoutines });
     return {
       ...state,
       routines: updatedRoutines,
@@ -119,7 +117,6 @@ const handlers = {
     const { index } = action.payload;
     let updatedRoutines = state.routines;
     updatedRoutines.splice(index, 1);
-    console.log(index, 'removed', { updatedRoutines });
     return {
       ...state,
       routines: updatedRoutines,
@@ -201,17 +198,18 @@ export const ProfileProvider = (props) => {
     }
   };
 
-  const deleteDog = async (dogProfile, index) => {
+  const deleteDog = async (dogId, index) => {
     try {
-      let success = true;
+      let success = false;
       // If this was a previous saved entry with assigned dogId run the API to delete from DB
-      if (dogProfile.id) {
-        const response = await profileApi.deleteDog(dogProfile.id);
+      if (dogId) {
+        const response = await profileApi.deleteDog({ dogId });
         success = response.success;
       }
       // On successful API call or if the profile is an unsaved profile
       // Update the context to remove the card
-      if (success || !dogProfile.id) {
+      if (success || !dogId) {
+        success = true;
         dispatch({
           type: ActionType.DELETEDOG,
           payload: {
@@ -231,7 +229,6 @@ export const ProfileProvider = (props) => {
   const updateUser = async (updatedUserProfile) => {
     try {
       const { success, data } = await profileApi.updateUserProfile(updatedUserProfile);
-      console.log({ updatedUserProfile });
       if (success) {
         dispatch({
           type: ActionType.UPDATEUSER,
@@ -261,12 +258,13 @@ export const ProfileProvider = (props) => {
   const saveNewDog = async (dogProfile, index) => {
     try {
       const { success, data } = await profileApi.saveNewDog(dogProfile);
+      console.log('dog', data);
       if (success) {
         dispatch({
           type: ActionType.SAVENEWDOG,
           payload: {
             index,
-            savedDog: data,
+            savedDog: data.newDog,
           },
         });
         return success;
@@ -297,7 +295,7 @@ export const ProfileProvider = (props) => {
           type: ActionType.SAVENEWROUTINE,
           payload: {
             index,
-            savedRoutine: data,
+            savedRoutine: data.newRoutine,
           },
         });
         return success;

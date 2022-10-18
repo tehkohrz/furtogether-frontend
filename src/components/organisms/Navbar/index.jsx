@@ -35,16 +35,8 @@ const Links = [
     link: '/about',
   },
   {
-    name: 'Login',
-    link: '/signin',
-  },
-  {
-    name: 'Friends',
-    link: '/friends',
-  },
-  {
     name: 'Daily Walk',
-    link: '/map',
+    link: '/walk',
   },
   {
     name: 'My Info',
@@ -71,7 +63,7 @@ const NavLink = ({ children, href, onClick }) => (
     }}
     href={href}
     onClick={onClick}
-    color='teal.400'
+    color={useColorModeValue('teal.600', 'teal.400')}
     fontSize='1xl'
     fontWeight='bold'
   >
@@ -98,7 +90,7 @@ function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} w='100%' pos='sticky'>
+      <Box bg={useColorModeValue('blue.100', 'gray.900')} px={4} w='100%' pos='absolute'>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
@@ -108,7 +100,7 @@ function Navbar() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
-            <Text as='b' color='teal.100' fontSize='4xl'>
+            <Text as='b' color={useColorModeValue('teal.900', 'teal.100')} fontSize='4xl'>
               FurTogether
             </Text>
             {/* <Box>
@@ -128,34 +120,38 @@ function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
-                  minW={0}
-                >
-                  <Avatar
-                    size={'sm'}
-                    src={
-                      'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                    }
-                  />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem>Link 1</MenuItem>
-                  <MenuItem>Link 2</MenuItem>
-                  <MenuDivider />
-                  <MenuItem>
-                    {isAuthenticated ? (
-                      <NavLink onClick={handleLogout}>Sign Out</NavLink>
-                    ) : (
-                      <NavLink href={'/signin'}>Login</NavLink>
-                    )}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+              {false && (
+                <>
+                  <NavLink href={'/signin'}>Login / SignUp</NavLink>
+                </>
+              )}
+              {true /*Set the context to find the avatar */ && (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={'full'}
+                    variant={'link'}
+                    cursor={'pointer'}
+                    minW={0}
+                  >
+                    <Avatar
+                      size={'sm'}
+                      src={
+                        'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                      }
+                    />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>
+                      {isAuthenticated ? (
+                        <NavLink onClick={handleLogout}>Sign Out</NavLink>
+                      ) : (
+                        <NavLink href={'/signin'}>Login</NavLink>
+                      )}
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
             </Stack>
           </Flex>
         </Flex>

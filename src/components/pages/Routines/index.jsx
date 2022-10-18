@@ -5,7 +5,7 @@ import { useProfile } from '../../../hooks/use-profile';
 
 export default function Routine({ formReadOnly = true }) {
   const { routines, dogs } = useProfile();
-
+  console.log({ routines });
   if (!routines) {
     return (
       <Center height={'100%'}>

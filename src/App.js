@@ -16,7 +16,7 @@ const routes = [
     element: <Registration />,
   },
   {
-    path: '/walk/map',
+    path: '/walk',
     element: <Map />,
   },
   {

@@ -55,9 +55,8 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
       if (updatedRoutine.id) {
         success = await updateRoutine(updatedRoutine);
       } else {
-        success = await saveNewRoutine(updatedRoutine);
+        success = await saveNewRoutine(updatedRoutine, index);
       }
-
       // Respond with toast for feedback
       if (!success) {
         throw new Error(`Could not update the routine.`);
@@ -138,7 +137,7 @@ export default function RoutineForm({ routine = null, cardHandler, index }) {
           )}
         </Formik>
       </Box>
-      <CloseButton size='md' onClick={cardHandler} />
+      <CloseButton size='md' onClick={routine ? cardHandler : deleteHandler} />
     </Flex>
   );
 }
