@@ -1,5 +1,5 @@
 // import { ReactNode } from 'react';
-import React from 'react';
+import React, {useState} from 'react';
 import logo from '../../../assets/logo.svg';
 import {
   Box,
@@ -24,6 +24,7 @@ import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 
 // Auth
 import { useAuth } from '../../../hooks/use-auth';
+import { useAvatar } from '../../../hooks/use-navbar';
 
 // Google Auth
 import { googleLogout } from '../../../services/firebase.service';
@@ -52,6 +53,7 @@ const Links = [
   },
 ];
 
+
 const NavLink = ({ children, href, onClick }) => (
   <Link
     px={2}
@@ -76,6 +78,18 @@ function Navbar() {
   const { logout, isAuthenticated } = useAuth();
   console.log('isAuth: ', isAuthenticated);
 
+  const { avatarUrl, retrieveAvatar } = useAvatar()
+
+  const handleRetrieveAvatar = async () =>{
+    const abcd = await retrieveAvatar()
+  }
+
+  if (avatarUrl == null) {
+    handleRetrieveAvatar()
+    console.log('yes')
+  }
+
+
   const handleLogout = async () => {
     try {
       logout();
@@ -90,7 +104,7 @@ function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue('blue.100', 'gray.900')} px={4} w='100%' pos='absolute'>
+      <Box bg={useColorModeValue('blue.100', 'gray.900')} px={4} w='100%' pos='relative'>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
@@ -125,7 +139,7 @@ function Navbar() {
                   <NavLink href={'/signin'}>Login / SignUp</NavLink>
                 </>
               )}
-              {true /*Set the context to find the avatar */ && (
+              {avatarUrl && (
                 <Menu>
                   <MenuButton
                     as={Button}
@@ -137,7 +151,7 @@ function Navbar() {
                     <Avatar
                       size={'sm'}
                       src={
-                        'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                        avatarUrl
                       }
                     />
                   </MenuButton>

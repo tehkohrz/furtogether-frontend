@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../../supabaseClient'
-import { Box, Image, Input, Flex } from '@chakra-ui/react'
+import { supabase } from '../../../services/supabaseClient'
+import { Box, Flex, useColorModeValue, Stack, HStack, Stat, StatLabel, StatNumber, StatHelpText } from '@chakra-ui/react'
 import { MultipleFileUpload } from '../../atoms'
-import { ImageViewer } from '../../molecules'
+import { ImageViewer, ChakraCheckBox, SimpleSideBar } from '../../molecules'
+import { Avatar } from '../../organisms'
+import { photoAlbumAPI } from '../../../api/photoalbum-api' 
 
-const MultiplePhotoUpload = ({ size }) => {
-  const [avatarUrl, setAvatarUrl] = useState(null)
+const MultiplePhotoUpload = ({ size, data }) => {
+  const [arrayOfUrl, setArrayOfUrl] = useState([])
   const [animalUrl, setAnimalUrl] = useState([])
   const [uploading, setUploading] = useState(false)
+  const [dogUpload, setDogUpload] = useState("")
 
-  const arrayOfUrl = ['0.0033188937015726783.jpg','0.02363837650151379.jpg','0.11290762882225369.jpg','0.29053464275032814.jpg','0.3101771156671216.jpg']
-  let url;
 
   useEffect(() => {
-    if (arrayOfUrl) {
-      downloadImage(arrayOfUrl)
-
+    const fetchImage = async () => {
+      const getPhotoAlbum = await photoAlbumAPI.retrievePhotoAlbum()
+      const data = getPhotoAlbum['data']
+      
+      const urlContainer = []
+      for (const index in data) {
+        const object = data[index]
+        const url = object['url']
+        urlContainer.push(url)  
+      }
+      
+      setArrayOfUrl(urlContainer)
+      downloadImage(urlContainer)
+      console.log('Fetching multiple image')
     }
-  }, [uploading])
 
+    fetchImage()
+    
+  }, [uploading])
+  
   const onUpload = (url) => {
     downloadImage(url)
   }
@@ -26,6 +41,8 @@ const MultiplePhotoUpload = ({ size }) => {
   const downloadImage = async (patharray) => {
     try {
       const arrayUpload = []
+      // console.log('this is the path')
+      // console.log(patharray)
       for (const index in patharray) {
         const path = patharray[index]
         const { data, error } = await supabase.storage
@@ -36,25 +53,24 @@ const MultiplePhotoUpload = ({ size }) => {
         }
       const url = URL.createObjectURL(data)
       arrayUpload.push(url)
-      console.log(url)
+      // console.log(url)
       // console.log(animalUrl)
       }
-    setAnimalUrl([...animalUrl, ...arrayUpload])
+    setAnimalUrl(arrayUpload)
 
     } catch (error) {
       console.log('Error downloading image: ', error.message)
     }
   }
 
-  const uploadAvatar = async (event) => {
+  const uploadImages = async (event) => {
+    console.log('Uploading Images....')
     try {
-      setUploading(true)
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.')
-      }
-
-      const file = event.target.files[0]
+    
+    const curFiles = event.target.files
+    const listOfFileName = []
+    // console.log(curFiles)
+    for (const [key, file] of Object.entries(curFiles)) {
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random()}.${fileExt}`
       const filePath = `${fileName}`
@@ -63,63 +79,73 @@ const MultiplePhotoUpload = ({ size }) => {
       console.log(filePath)
 
       let { error: uploadError } = await supabase.storage
-        .from('avatars')
+        .from('animalphotos')
         .upload(filePath, file)
-
+      listOfFileName.push(filePath)
+      console.log('Successful upload')
+      
       if (uploadError) {
         throw uploadError
       }
-
-      onUpload(filePath)
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      setUploading(false)
     }
-  }
+    //
 
-  const uploadImages = async (event) => {
-    console.log('lol')
-    try {
+    const response = await photoAlbumAPI.uploadPhotoAlbum({listOfFileName,dogUpload})
+    console.log(response)
 
-    const curFiles = event.target.files
-
-    // console.log(curFiles)
-    for (const [key, file] of Object.entries(curFiles)) {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
-
-      console.log(filePath)
-
-      // let { error: uploadError } = await supabase.storage
-      //   .from('animalphotos')
-      //   .upload(filePath, file)
-
-      console.log('Successful upload')
-      
-      // if (uploadError) {
-      //   throw uploadError
-      // }
-    }
+    setUploading(!uploading)
+    
     } catch (error) {
       console.error(error)
     }
   }
 
+  const eventHandler= (event) => {
+    console.log('hiiiii this is event')
+    console.log(event)
+    setDogUpload(event)
+  }
+
 
   return (
     <Flex direction='column'>
-
-      <Box>
-        <label className="button primary block" htmlFor="multiple">
-        Upload photos
-      </label>
-      <MultipleFileUpload handleChange={uploadImages}/>
-      </Box>
-      <Box>
-        <ImageViewer imageArray={animalUrl ? animalUrl : `https://via.placeholder.com/150`}/>
-      </Box>
+      <HStack bg={useColorModeValue('cyan.500', 'teal.800')} p='2' mt='2' align={'center'} justify={'space-around'}> 
+        <Box>
+          <Avatar/>
+        </Box>
+        <HStack>
+          <Box>
+           <Stat px='6' py='2' border={'1px solid'} borderColor={useColorModeValue('gray.500', 'gray.500')}>
+              {/* <StatLabel> Photos </StatLabel> */}
+              <StatNumber> 500 </StatNumber>
+              <StatHelpText> Photos</StatHelpText>
+           </Stat>
+          </Box>
+          <Box>
+              <Stat px='6' py='2' border={'1px solid'} borderColor={useColorModeValue('gray.500', 'gray.500')}>
+              {/* <StatLabel> Photos </StatLabel> */}
+              <StatNumber> 1 </StatNumber>
+              <StatHelpText> Dog </StatHelpText>
+           </Stat>
+          </Box>
+        </HStack>
+        <Stack>
+          <Box>
+            <ChakraCheckBox eventHandler ={eventHandler} data={data}/>
+          </Box>
+          <Box>
+            <MultipleFileUpload handleChange={uploadImages}/>
+          </Box>
+        </Stack>
+      </HStack>
+      <Stack>
+        <Box>
+        <SimpleSideBar/>
+        </Box>
+        <Box border={'1px solid'} direction='column'>
+          {arrayOfUrl ? <ImageViewer imageArray={animalUrl ? animalUrl : `https://via.placeholder.com/150`}/> : null}
+        </Box>
+      </Stack>
     </Flex>
   )
 }

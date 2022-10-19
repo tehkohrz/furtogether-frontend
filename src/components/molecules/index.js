@@ -9,3 +9,5 @@ export { default as TabPanels } from './TabPanels';
 export { default as TabList } from './TabsList';
 export { default as LocationMarker } from './LocationMarker';
 export { default as ImageViewer } from './ImageViewer'
+export { default as ChakraCheckBox } from './ChakraCheckBox'
+export { default as SimpleSideBar } from './SimpleSideBar'

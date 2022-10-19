@@ -3,7 +3,7 @@ import { TabList, TabPanels } from '../../molecules'
 import { Tabs as TabsChakra } from '@chakra-ui/react'
 
 
-const Tabs = ({tab, tabContent}) => {
+const Tabs = ({tab, tabContent, handleChange}) => {
   
   // example
   // const tab = [1,2,3]
@@ -11,7 +11,7 @@ const Tabs = ({tab, tabContent}) => {
 
   return (
     <>
-      <TabsChakra>
+      <TabsChakra onChange={handleChange}>
         <TabList tabArray={tab}></TabList>
         <TabPanels contentArray={tabContent} />
       </TabsChakra>
