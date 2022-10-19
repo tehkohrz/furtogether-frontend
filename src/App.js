@@ -8,6 +8,7 @@ import { ProfileProvider } from './contexts/profile-context';
 import { ProfileTab, Routines } from './components/pages';
 
 import theme from './components/theme';
+import { AvatarProvider } from './contexts/navbar-context';
 
 const routes = [
   {
@@ -65,22 +66,24 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <React.Suspense fallback={null}>
-        <Navbar />
+        <AvatarProvider>
+          <Navbar />
         <Router basename='/'>
           <Routes>
             {routes.map((route) => (
               <Route key={route} path={route.path} element={route.element}></Route>
-            ))}
+              ))}
             {authenticatedRoutes.map((route) => (
               <Route
-                key={route}
-                path={route.path}
-                exact
-                element={<RequireAuth>{route.element}</RequireAuth>}
+              key={route}
+              path={route.path}
+              exact
+              element={<RequireAuth>{route.element}</RequireAuth>}
               />
-            ))}
+              ))}
           </Routes>
         </Router>
+        </AvatarProvider>
       </React.Suspense>
     </ChakraProvider>
   );

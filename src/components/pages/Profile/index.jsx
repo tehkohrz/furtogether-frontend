@@ -4,6 +4,7 @@ import { Spinner, Flex, Stack, Center, Text, Box } from '@chakra-ui/react';
 import { HumanForm, DogComponent, Avatar } from '../../organisms';
 import { profileApi } from '../../../api/profile-api';
 
+
 const Profile = () => {
   const { user, dogs } = useProfile();
   // No profile loaded keep spinning
@@ -31,7 +32,7 @@ const Profile = () => {
           Your Profile
         </Text>
         <Box justify={'center'} align={'center'}>
-          <Avatar url={url} />
+        {url ? <Avatar url={url} /> : <Avatar url={null}/>}
         </Box>
         <Flex align={'top'} justify={'center'} width={'100%'}>
           <HumanForm userProfile={user} />

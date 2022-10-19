@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../../supabaseClient'
+import { supabase } from '../../../services/supabaseClient'
 import { Box, Image, Input } from '@chakra-ui/react'
 import { profileApi } from '../../../api/profile-api'
 
 const Avatar = ({ url, size }) => {
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [uploading, setUploading] = useState(false)
-
 
   useEffect(() => {
     if (url) downloadImage(url)
