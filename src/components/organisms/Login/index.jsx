@@ -37,24 +37,24 @@ const Login = ({ handleToggle }) => {
     } catch (error) {
       console.log(error);
 
-      const googleUser = await axios
-        .post('http://localhost:3004/sign-up', {
-          name: user.displayName,
-          email: user.email,
-          password: user.uid,
-          gender: 'NULL',
-        })
-        .then((response) => {
-          signIn(response.email, response.password);
-        })
-        .then(() => {
-          navigate('/profile');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      // const googleUser = await axios
+      //   .post('https://furtogether.fly.dev/sign-up', {
+      //     name: user.displayName,
+      //     email: user.email,
+      //     password: user.uid,
+      //     gender: 'NULL',
+      //   })
+      //   .then((response) => {
+      //     signIn(response.email, response.password);
+      //   })
+      //   .then(() => {
+      //     navigate('/profile');
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
 
-      console.log(googleUser);
+      // console.log(googleUser);
       return;
     }
   };
