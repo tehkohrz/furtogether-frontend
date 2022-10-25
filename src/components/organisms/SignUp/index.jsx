@@ -49,7 +49,7 @@ const SignUp = ({ handleToggle }) => {
   const buttonHandleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:3004/sign-up', registerMap);
+      await axios.post('https://furtogether.fly.dev/sign-up', registerMap);
       console.log('register map: ', registerMap);
 
       if (registerMap) {

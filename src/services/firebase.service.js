@@ -51,7 +51,7 @@ const signInWithGoogle = async () => {
         email: user.email,
       });
 
-      await axios.post('http://localhost:3004/sign-up', {
+      await axios.post('https://furtogether.fly.dev/sign-up', {
         name: user.displayName,
         email: user.email,
         password: user.uid,
